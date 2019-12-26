@@ -1,0 +1,20 @@
+{
+    "devppool": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-playoff-pool-devppool-92657-authRole",
+            "UnauthRoleArn": "arn:aws:iam::176207834191:role/amplify-playoff-pool-devppool-92657-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::176207834191:role/amplify-playoff-pool-devppool-92657-authRole",
+            "Region": "us-east-2",
+            "DeploymentBucketName": "amplify-playoff-pool-devppool-92657-deployment",
+            "UnauthRoleName": "amplify-playoff-pool-devppool-92657-unauthRole",
+            "StackName": "amplify-playoff-pool-devppool-92657",
+            "StackId": "arn:aws:cloudformation:us-east-2:176207834191:stack/amplify-playoff-pool-devppool-92657/2881f350-27f4-11ea-b865-06faea3c34dc",
+            "AmplifyAppId": "d3ols5k465hooe"
+        },
+        "categories": {
+            "auth": {
+                "cognitob700eede": {}
+            }
+        }
+    }
+}
