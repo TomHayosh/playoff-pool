@@ -54,6 +54,59 @@ const convertUrlType = (param, type) => {
   }
 }
 
+const logUserAttributes = async function(req, res) {
+  // To get this to work, add AmazonCognitoReadOnly policy to the lambda function (playoffpoolLambdaRole207e11a6-devppool)
+  // Do this in iAM -> Roles. Select the lambda function backend role then click Attach Policy
+  var nameAndEmail = {
+    "Name": "",
+    "Email": ""
+  }
+  // Based on https://janhesters.com/how-to-access-the-user-in-lambda-functions-with-amplify/https://janhesters.com/how-to-access-the-user-in-lambda-functions-with-amplify/
+  try {
+    const IDP_REGEX = /.*\/.*,(.*)\/(.*):CognitoSignIn:(.*)/;
+    const authProvider =
+      req.apiGateway.event.requestContext.identity
+        .cognitoAuthenticationProvider;
+    const [, , , userId] = authProvider.match(IDP_REGEX);
+
+    // But the next 4 lines are from https://serverless-stack.com/chapters/mapping-cognito-identity-id-and-user-pool-id.html
+    const parts = authProvider.split(':');
+    const userPoolIdParts = parts[parts.length - 3].split('/');
+
+    const userPoolId = userPoolIdParts[userPoolIdParts.length - 1];
+    const userPoolUserId = parts[parts.length - 1];
+    // Needed to get userPoolId for use in the next section
+
+    const cognito = new AWS.CognitoIdentityServiceProvider();
+    const listUsersResponse = await cognito
+      .listUsers({
+        UserPoolId: userPoolId,
+        Filter: `sub = "${userId}"`,
+        Limit: 1,
+      })
+      .promise();
+    const user = listUsersResponse.Users[0];
+    const j = user["Attributes"].length;
+    var i;
+    for (i = 0; i < j; i++) {
+      if (user["Attributes"][i]["Name"] === "name") {
+        nameAndEmail["Name"] = user["Attributes"][i]["Value"]
+        console.log("Just set Name to " + user["Attributes"][i]["Value"]);
+      } else if (user["Attributes"][i]["Name"] === "email") {
+        nameAndEmail["Email"] = user["Attributes"][i]["Value"]
+        console.log("Just set Email to " + user["Attributes"][i]["Value"]);
+      }
+      console.log(user["Attributes"][i]["Name"] + " : " + user["Attributes"][i]["Value"]);
+    }
+//    res.json({ user, message: 'get call succeed!', url: req.url });
+  } catch (error) {
+    console.log("Got an error");
+    console.log(error);
+    // res.json({ error, message: 'get call failed' });
+  }
+  console.log(nameAndEmail["Name"] + ", " + nameAndEmail["Email"]);
+}
+
 /********************************
  * HTTP Get method for list objects *
  ********************************/
@@ -143,7 +196,8 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
 app.put(path, function(req, res) {
 
   if (userIdPresent) {
-    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+//    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    req.body[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }
 
   let putItemParams = {
@@ -164,11 +218,65 @@ app.put(path, function(req, res) {
 * HTTP post method for insert object *
 *************************************/
 
-app.post(path, function(req, res) {
+app.post(path, async function(req, res) {
 
   if (userIdPresent) {
     req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
   }
+
+//  const nameAndEmail = await logUserAttributes(req, res).promise();
+  // To get this to work, add AmazonCognitoReadOnly policy to the lambda function (playoffpoolLambdaRole207e11a6-devppool)
+  // Do this in iAM -> Roles. Select the lambda function backend role then click Attach Policy
+  var nameAndEmail = {
+    "Name": "",
+    "Email": ""
+  }
+  // Based on https://janhesters.com/how-to-access-the-user-in-lambda-functions-with-amplify/https://janhesters.com/how-to-access-the-user-in-lambda-functions-with-amplify/
+  try {
+    const IDP_REGEX = /.*\/.*,(.*)\/(.*):CognitoSignIn:(.*)/;
+    const authProvider =
+      req.apiGateway.event.requestContext.identity
+        .cognitoAuthenticationProvider;
+    const [, , , userId] = authProvider.match(IDP_REGEX);
+
+    // But the next 4 lines are from https://serverless-stack.com/chapters/mapping-cognito-identity-id-and-user-pool-id.html
+    const parts = authProvider.split(':');
+    const userPoolIdParts = parts[parts.length - 3].split('/');
+
+    const userPoolId = userPoolIdParts[userPoolIdParts.length - 1];
+    const userPoolUserId = parts[parts.length - 1];
+    // Needed to get userPoolId for use in the next section
+
+    const cognito = new AWS.CognitoIdentityServiceProvider();
+    const listUsersResponse = await cognito
+      .listUsers({
+        UserPoolId: userPoolId,
+        Filter: `sub = "${userId}"`,
+        Limit: 1,
+      })
+      .promise();
+    const user = listUsersResponse.Users[0];
+    const j = user["Attributes"].length;
+    var i;
+    for (i = 0; i < j; i++) {
+      if (user["Attributes"][i]["Name"] === "name") {
+        nameAndEmail["Name"] = user["Attributes"][i]["Value"]
+        console.log("Just set Name to " + user["Attributes"][i]["Value"]);
+      } else if (user["Attributes"][i]["Name"] === "email") {
+        nameAndEmail["Email"] = user["Attributes"][i]["Value"]
+        console.log("Just set Email to " + user["Attributes"][i]["Value"]);
+      }
+      console.log(user["Attributes"][i]["Name"] + " : " + user["Attributes"][i]["Value"]);
+    }
+//    res.json({ user, message: 'get call succeed!', url: req.url });
+  } catch (error) {
+    console.log("Got an error");
+    console.log(error);
+    // res.json({ error, message: 'get call failed' });
+  }
+  console.log(nameAndEmail["Name"] + ",,, " + nameAndEmail["Email"]);
+  req.body['name'] = nameAndEmail["Name"];
+  req.body['email'] = nameAndEmail["Email"];
 
   let putItemParams = {
     TableName: tableName,
