@@ -111,6 +111,49 @@ const logUserAttributes = async function(req, res) {
  * HTTP Get method for list objects *
  ********************************/
 
+app.get(path, function(req, res) {
+  var condition = {}
+  condition[partitionKeyName] = {
+    ComparisonOperator: 'EQ'
+  }
+  console.log(req.apiGateway.event);
+
+  const game1start = Date.parse('28 Dec 2019 20:00:00 GMT');
+  if (Date.now() < game1start) {
+    console.log("The game has not started");
+  } else {
+    console.log("You cannot change this pick. The game has started");
+  }
+  res.json({fake: 'In the temp get function'});
+
+  /*
+  if (userIdPresent && req.apiGateway) {
+    condition[partitionKeyName]['AttributeValueList'] = [req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH ];
+  } else {
+    try {
+      condition[partitionKeyName]['AttributeValueList'] = [ convertUrlType(req.params[partitionKeyName], partitionKeyType) ];
+    } catch(err) {
+      res.statusCode = 500;
+      res.json({error: 'Wrong column type ' + err});
+    }
+  }
+
+  let queryParams = {
+    TableName: tableName,
+    KeyConditions: condition
+  }
+
+  dynamodb.query(queryParams, (err, data) => {
+    if (err) {
+      res.statusCode = 500;
+      res.json({error: 'Could not load items: ' + err});
+    } else {
+      res.json(data.Items);
+    }
+  });
+  */
+});
+
 app.get(path + hashKeyPath, function(req, res) {
   var condition = {}
   condition[partitionKeyName] = {
@@ -139,6 +182,43 @@ app.get(path + hashKeyPath, function(req, res) {
       res.json({error: 'Could not load items: ' + err});
     } else {
       res.json(data.Items);
+    }
+  });
+});
+
+app.get(path + '/week1' + hashKeyPath + sortKeyPath, function(req, res) {
+  /*
+  var condition = {}
+  condition[partitionKeyName] = {
+    ComparisonOperator: 'EQ'
+  }
+
+  if (userIdPresent && req.apiGateway) {
+    condition[partitionKeyName]['AttributeValueList'] = [req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH ];
+  } else {
+    try {
+      condition[partitionKeyName]['AttributeValueList'] = [ convertUrlType(req.params[partitionKeyName], partitionKeyType) ];
+    } catch(err) {
+      res.statusCode = 500;
+      res.json({error: 'Wrong column type ' + err});
+    }
+  }
+  */
+
+  let queryParams = {
+    TableName: tableName,
+    ProjectionExpression: "r1g1, fullname"
+  }
+
+  // dynamodb.query(queryParams, (err, data) => {
+  dynamodb.scan(queryParams, (err, data) => {
+    if (err) {
+      res.statusCode = 500;
+      res.json({error: 'Could not load items: ' + err});
+      console.log("Error getting week1: " + err);
+    } else {
+      res.json(data.Items);
+      console.log("Got " + data.Items.length + " items");
     }
   });
 });
@@ -276,7 +356,7 @@ app.post(path, async function(req, res) {
     // res.json({ error, message: 'get call failed' });
   }
   console.log(nameAndEmail["Name"] + ",,, " + nameAndEmail["Email"]);
-  req.body['name'] = nameAndEmail["Name"];
+  req.body['fullname'] = nameAndEmail["Name"];
   req.body['email'] = nameAndEmail["Email"];
 
   let putItemParams = {

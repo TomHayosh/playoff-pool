@@ -21,12 +21,16 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    const response = await API.get("ppoolApi", "/items/week1/fakeId");
+    this.setState({ list: { ...response }, showDetails: true });
+    alert(response.length);
+    /*
     await API.post("ppoolApi", "/items", {
       body: {
-        id: Date.now().toString(),
-        r1g1: -31
+        // id: Date.now().toString(),
       }
     });
+    */
   }
 
   render() {
