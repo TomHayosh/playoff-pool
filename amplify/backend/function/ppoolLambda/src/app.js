@@ -206,8 +206,8 @@ app.get(path + '/week1' + hashKeyPath + sortKeyPath, function(req, res) {
   */
 
   let queryParams = {
-    TableName: tableName,
-    ProjectionExpression: "r1g1, fullname"
+    TableName: tableName/*,
+    ProjectionExpression: "r1g1, fullname"*/
   }
 
   // dynamodb.query(queryParams, (err, data) => {

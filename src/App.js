@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import logo from './logo.svg';
+import { MDBDataTable } from 'mdbreact';
 import Amplify, { API } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
@@ -16,17 +17,75 @@ class App extends Component {
       title: "",
       list: [],
       item: {},
-      showDetails: false 
+      table: {
+        columns: [
+          {
+            label: 'Name',
+            field: 'name',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'Game 1',
+            field: 'r1g1',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Game 2',
+            field: 'r1g2',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Game 3',
+            field: 'r1g3',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Game 4',
+            field: 'r1g4',
+            sort: 'asc',
+            width: 270
+          }
+        ],
+        rows: []
+      } 
     };
   }
 
   async componentDidMount() {
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
     this.setState({ list: { ...response }, showDetails: true });
-    alert(response.length);
+    var temptable = {...this.state.table};
+    var j = 0;
+    for (var i = 0; i < response.length; i++) {
+      if (response[i]['realPerson'] != false) {
+        var pick1 = '';
+        if (response[i]['r1g1'] !== undefined) {
+          pick1 = response[i]['r1g1'];
+        }
+        var pick2 = '';
+        if (response[i]['r1g2'] !== undefined) {
+          pick2 = response[i]['r1g2'];
+        }
+        var pick3 = '';
+        if (response[i]['r1g3'] !== undefined) {
+          pick3 = response[i]['r1g3'];
+        }
+        var pick4 = '';
+        if (response[i]['r1g4'] !== undefined) {
+          pick4 = response[i]['r1g4'];
+        }
+        temptable.rows[j++] = {name: response[i]['fullname'], r1g1: pick1, r1g2: pick2, r1g3: pick3, r1g4: pick4};
+      }
+    }
+    this.setState({table: temptable});
     /*
     await API.post("ppoolApi", "/items", {
       body: {
+        r1g1: -3
         // id: Date.now().toString(),
       }
     });
@@ -36,20 +95,12 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <MDBDataTable
+          striped
+          bordered
+          hover
+          data={this.state.table}
+        />
       </div>
     );
   }}
