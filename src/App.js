@@ -27,25 +27,25 @@ class App extends Component {
             width: 150
           },
           {
-            label: 'Game 1',
+            label: 'at',
             field: 'r1g1',
             sort: 'asc',
             width: 270
           },
           {
-            label: 'Game 2',
+            label: 'at',
             field: 'r1g2',
             sort: 'asc',
             width: 270
           },
           {
-            label: 'Game 3',
+            label: 'at',
             field: 'r1g3',
             sort: 'asc',
             width: 270
           },
           {
-            label: 'Game 4',
+            label: 'at',
             field: 'r1g4',
             sort: 'asc',
             width: 270
@@ -98,6 +98,16 @@ class App extends Component {
           pick4 = response[i]['r1g4'];
         }
         temptable.rows[j++] = {name: response[i]['fullname'], r1g1: pick1, r1g2: pick2, r1g3: pick3, r1g4: pick4};
+      } else {
+        if (response[i]['id'] === 'awayTeam') {
+          for (var g = 1; g <= 4; g++) {
+            temptable.columns[g].label = response[i]['r1g' + g] + ' ' + temptable.columns[g].label;
+          }
+        } else if (response[i]['id'] === 'homeTeam') {
+          for (var g = 0; g <= 4; g++) {
+            temptable.columns[g].label = temptable.columns[g].label + ' ' + response[i]['r1g' + g];
+          }
+        }
       }
     }
     this.setState({table: temptable});
