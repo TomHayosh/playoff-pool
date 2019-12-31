@@ -54,6 +54,48 @@ const convertUrlType = (param, type) => {
   }
 }
 
+const processStartTimes = function(data) {
+  var newitems = [];
+  var startTimes = -1;
+  var i;
+  for (i = 0; i < data.Items.length; i++) {
+    if (data.Items[i]['id'] === 'startTimes') {
+      startTimes = i;
+      break;
+    }
+  }
+
+  for (i = 0; i < data.Items.length; i++) {
+    if (data.Items[i]['realPerson'] === false) {
+      newitems[i] = {...data.Items[i]};
+    } else {
+      var item = {};
+      const keys = Object.keys(data.Items[i]);
+      // console.log("Key " + 0 + ", (" + keys[0] + ") = " + data.Items[i][keys[0]]);
+      for (var j = 0; j < keys.length; j++) {
+        if (keys[j].match(/r1g/) === null){
+          item[keys[j]] = data.Items[i][keys[j]];
+        } else {
+          item[keys[j]] = "pick";
+        }
+      }
+      newitems[i] = {...item};
+    }
+    /*
+    var item = {};
+    const keys = Object.keys(data.Items[i]);
+    for (var j = 0; j < keys.length; j++) {
+      if (key[j].match(/r1g/) !== null){
+        item[key[j]] = data.Items[i][key[j]];
+      } else {
+        item[key[j]] = "pick";
+      }
+    }
+    */
+  }
+  return newitems;
+}
+
 const logUserAttributes = async function(req, res) {
   // To get this to work, add AmazonCognitoReadOnly policy to the lambda function (playoffpoolLambdaRole207e11a6-devppool)
   // Do this in iAM -> Roles. Select the lambda function backend role then click Attach Policy
@@ -186,6 +228,10 @@ app.get(path + hashKeyPath, function(req, res) {
   });
 });
 
+/********************************
+ * HTTP Get method for list objects *
+ ********************************/
+
 app.get(path + '/week1' + hashKeyPath + sortKeyPath, function(req, res) {
   /*
   var condition = {}
@@ -217,8 +263,11 @@ app.get(path + '/week1' + hashKeyPath + sortKeyPath, function(req, res) {
       res.json({error: 'Could not load items: ' + err});
       console.log("Error getting week1: " + err);
     } else {
-      res.json(data.Items);
-      console.log("Got " + data.Items.length + " items");
+      const items = processStartTimes(data);
+      // res.json(data.Items);
+      // console.log("Got " + data.Items.length + " items");
+      res.json(items);
+      console.log("Got " + items.length + " items");
     }
   });
 });

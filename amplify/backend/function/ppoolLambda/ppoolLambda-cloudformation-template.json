@@ -71,7 +71,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-playoff-pool-devppool-92657-deployment",
-					"S3Key": "amplify-builds/ppoolLambda-31456e4330572f47584f-build.zip"
+					"S3Key": "amplify-builds/ppoolLambda-7668334634425574654f-build.zip"
 				}
 			}
 		},
