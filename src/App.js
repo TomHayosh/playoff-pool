@@ -57,7 +57,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    await this.fetchUser();
+    await this.fetchData();
     /*
     await API.post("ppoolApi", "/items", {
       body: {
@@ -68,7 +68,7 @@ class App extends Component {
     */
   }
 
-  async fetchUser() {
+  async fetchData() {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
     if (response1['id'] !== undefined) {
       this.setState({idFound: true});
@@ -94,7 +94,7 @@ class App extends Component {
             temptable.columns[g].label = response[i]['r1g' + g] + ' ' + temptable.columns[g].label;
           }
         } else if (response[i]['id'] === 'homeTeam') {
-          for (var g = 0; g <= 4; g++) {
+          for (var g = 1; g <= 4; g++) {
             temptable.columns[g].label = temptable.columns[g].label + ' ' + response[i]['r1g' + g];
           }
         }
@@ -113,7 +113,7 @@ class App extends Component {
         r1g4: 0,
       }
     });
-    this.fetchUser();
+    this.fetchData();
   };
 
   render() {
