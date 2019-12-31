@@ -13,8 +13,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: "",
-      title: "",
+      newEntrant: false,
+      idFound: false,
+      errorResponse: true,
       list: [],
       item: {},
       table: {
@@ -56,6 +57,12 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    const response1 = await API.get("ppoolApi", "/items/object/fakeId");
+    if (response1['id'] !== undefined) {
+      this.setState({idFound: true});
+    } else if (response1['newEntrant']) {
+      this.setState({newEntrant: true});
+    }
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
     this.setState({ list: { ...response }, showDetails: true });
     var temptable = {...this.state.table};
@@ -92,15 +99,36 @@ class App extends Component {
     */
   }
 
+  handleSubmit = async event => {
+    event.preventDefault();
+    await API.post("ppoolApi", "/items", {
+      body: {
+        r1g1: -13
+      }
+    });
+    this.setState({ content: "", title: "" });
+    this.fetchList();
+  };
+
   render() {
     return (
       <div className="App">
-        <MDBDataTable
-          striped
-          bordered
-          hover
-          data={this.state.table}
-        />
+        {this.state.idFound ? (
+          <MDBDataTable
+            striped
+            bordered
+            hover
+            data={this.state.table}
+          />
+        ) : (this.state.newEntrant ? (
+          <div>
+            <h1>Click here to join the pool for $20</h1>
+            <button onClick={this.handleSubmit}>JOIN!!!</button>
+            </div>
+          ) : (
+            <h1>Default state</h1>
+          )
+        )}
       </div>
     );
   }}

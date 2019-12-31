@@ -256,13 +256,17 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
 
   dynamodb.get(getItemParams,(err, data) => {
     if(err) {
+      console.log("In err");
       res.statusCode = 500;
       res.json({error: 'Could not load items: ' + err.message});
     } else {
       if (data.Item) {
+        console.log("Found item");
         res.json(data.Item);
       } else {
-        res.json(data) ;
+        console.log("Did not find item");
+        // res.json(data) ;
+        res.json({newEntrant: true});
       }
     }
   });
