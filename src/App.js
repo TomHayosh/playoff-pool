@@ -81,23 +81,13 @@ class App extends Component {
     var j = 0;
     for (var i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] != false) {
-        var pick1 = '';
-        if (response[i]['r1g1'] !== undefined) {
-          pick1 = response[i]['r1g1'];
+        var picks = ['', '', '', ''];
+        for (var p = 0; p < 4; p++) {
+          if (response[i]['r1g1'] !== undefined) {
+            picks[p] = response[i]['r1g' + (p+1)];
+          }
         }
-        var pick2 = '';
-        if (response[i]['r1g2'] !== undefined) {
-          pick2 = response[i]['r1g2'];
-        }
-        var pick3 = '';
-        if (response[i]['r1g3'] !== undefined) {
-          pick3 = response[i]['r1g3'];
-        }
-        var pick4 = '';
-        if (response[i]['r1g4'] !== undefined) {
-          pick4 = response[i]['r1g4'];
-        }
-        temptable.rows[j++] = {name: response[i]['fullname'], r1g1: pick1, r1g2: pick2, r1g3: pick3, r1g4: pick4};
+        temptable.rows[j++] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
       } else {
         if (response[i]['id'] === 'awayTeam') {
           for (var g = 1; g <= 4; g++) {
