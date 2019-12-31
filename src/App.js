@@ -57,6 +57,18 @@ class App extends Component {
   }
 
   async componentDidMount() {
+    await this.fetchUser();
+    /*
+    await API.post("ppoolApi", "/items", {
+      body: {
+        r1g1: -3
+        // id: Date.now().toString(),
+      }
+    });
+    */
+  }
+
+  async fetchUser() {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
     if (response1['id'] !== undefined) {
       this.setState({idFound: true});
@@ -89,25 +101,19 @@ class App extends Component {
       }
     }
     this.setState({table: temptable});
-    /*
-    await API.post("ppoolApi", "/items", {
-      body: {
-        r1g1: -3
-        // id: Date.now().toString(),
-      }
-    });
-    */
   }
 
   handleSubmit = async event => {
     event.preventDefault();
     await API.post("ppoolApi", "/items", {
       body: {
-        r1g1: -13
+        r1g1: 0,
+        r1g2: 0,
+        r1g3: 0,
+        r1g4: 0,
       }
     });
-    this.setState({ content: "", title: "" });
-    this.fetchList();
+    this.fetchUser();
   };
 
   render() {
