@@ -83,9 +83,10 @@ class App extends Component {
       if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         for (var p = 0; p < 4; p++) {
-          if (response[i]['r1g1'] !== undefined) {
+          if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
           }
+          picks[p] = '' + picks[p] + response[i]['edit-r1g' + (p+1)];
         }
         temptable.rows[j++] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
       } else {

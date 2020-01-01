@@ -90,10 +90,16 @@ const processStartTimes = function(data, userid) {
           const now = Date.now();
           // if (k == 0 && data.Items[startTimes]['r1g'+(k+1)] < now) {
           // if (data.Items[startTimes]['r1g'+(k+1)] < now) {
-          item[keys[j]] = "pick";
+          item[keys[j]] = "";
           for (var g = 1; g <= 4; g++) {
             if (k == g-1 && Date.parse(data.Items[startTimes]['r1g'+g]) < now || data.Items[i]['id'] === userid) {
               item[keys[j]] = data.Items[i][keys[j]];
+            }
+          }
+          item['edit-'+keys[j]] = false;
+          for (var g = 1; g <= 4; g++) {
+            if (k == g-1 && Date.parse(data.Items[startTimes]['r1g'+g]) > now && data.Items[i]['id'] === userid) {
+              item['edit-'+keys[j]] = true;
             }
           }
         }
