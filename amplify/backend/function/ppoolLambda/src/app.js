@@ -59,8 +59,9 @@ const processStartTimes = function(data) {
   var startTimes = -1;
   var i;
   for (i = 0; i < data.Items.length; i++) {
-    if (data.Items[i]['id'] === 'startTimes') {
+    if (data.Items[i]['id'] === 'startTime') {
       startTimes = i;
+      console.log("startTimes = " + startTimes);
       break;
     }
   }
@@ -71,12 +72,35 @@ const processStartTimes = function(data) {
     } else {
       var item = {};
       const keys = Object.keys(data.Items[i]);
-      // console.log("Key " + 0 + ", (" + keys[0] + ") = " + data.Items[i][keys[0]]);
       for (var j = 0; j < keys.length; j++) {
         if (keys[j].match(/r1g/) === null){
           item[keys[j]] = data.Items[i][keys[j]];
         } else {
-          item[keys[j]] = "pick";
+          var k = -1;
+          if (keys[j].match(/r1g1/) !== null) {
+            k = 0;
+          } else if (keys[j].match(/r1g2/) !== null) {
+            k = 1;
+          } else if (keys[j].match(/r1g3/) !== null) {
+            k = 2;
+          } else if (keys[j].match(/r1g4/) !== null) {
+            k = 3;
+          }
+          console.log("Matched on " + k);
+          const now = Date.now();
+          // if (k == 0 && data.Items[startTimes]['r1g'+(k+1)] < now) {
+          // if (data.Items[startTimes]['r1g'+(k+1)] < now) {
+          if (k == 0 && Date.parse(data.Items[startTimes]['r1g1']) < now) {
+            item[keys[j]] = data.Items[i][keys[j]];
+          } else if (k == 1 && Date.parse(data.Items[startTimes]['r1g2']) < now) {
+            item[keys[j]] = data.Items[i][keys[j]];
+          } else if (k == 2 && Date.parse(data.Items[startTimes]['r1g3']) < now) {
+            item[keys[j]] = data.Items[i][keys[j]];
+          } else if (k == 3 && Date.parse(data.Items[startTimes]['r1g4']) < now) {
+            item[keys[j]] = data.Items[i][keys[j]];
+          } else {
+            item[keys[j]] = "pick";
+          }
         }
       }
       newitems[i] = {...item};
@@ -263,7 +287,7 @@ app.get(path + '/week1' + hashKeyPath + sortKeyPath, function(req, res) {
       res.json({error: 'Could not load items: ' + err});
       console.log("Error getting week1: " + err);
     } else {
-      const items = processStartTimes(data);
+      const items = processStartTimes(data, req.apiGateway.event.requestContext.identity.cognitoIdentityId);
       // res.json(data.Items);
       // console.log("Got " + data.Items.length + " items");
       res.json(items);
