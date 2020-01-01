@@ -54,7 +54,7 @@ const convertUrlType = (param, type) => {
   }
 }
 
-const processStartTimes = function(data) {
+const processStartTimes = function(data, userid) {
   var newitems = [];
   var startTimes = -1;
   var i;
@@ -90,13 +90,13 @@ const processStartTimes = function(data) {
           const now = Date.now();
           // if (k == 0 && data.Items[startTimes]['r1g'+(k+1)] < now) {
           // if (data.Items[startTimes]['r1g'+(k+1)] < now) {
-          if (k == 0 && Date.parse(data.Items[startTimes]['r1g1']) < now) {
+          if (k == 0 && Date.parse(data.Items[startTimes]['r1g1']) < now || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
-          } else if (k == 1 && Date.parse(data.Items[startTimes]['r1g2']) < now) {
+          } else if (k == 1 && Date.parse(data.Items[startTimes]['r1g2']) < now || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
-          } else if (k == 2 && Date.parse(data.Items[startTimes]['r1g3']) < now) {
+          } else if (k == 2 && Date.parse(data.Items[startTimes]['r1g3']) < now || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
-          } else if (k == 3 && Date.parse(data.Items[startTimes]['r1g4']) < now) {
+          } else if (k == 3 && Date.parse(data.Items[startTimes]['r1g4']) < now || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
           } else {
             item[keys[j]] = "pick";
