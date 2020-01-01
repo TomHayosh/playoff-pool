@@ -125,6 +125,8 @@ class App extends Component {
             striped
             bordered
             hover
+            paging={false}
+            searching={false}
             data={this.state.table}
           />
         ) : (this.state.newEntrant ? (
