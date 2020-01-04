@@ -61,7 +61,7 @@ const processStartTimes = function(data, userid) {
   for (i = 0; i < data.Items.length; i++) {
     if (data.Items[i]['id'] === 'startTime') {
       startTimes = i;
-      console.log("startTimes = " + startTimes);
+      // console.log("startTimes = " + startTimes);
       break;
     }
   }
@@ -86,7 +86,7 @@ const processStartTimes = function(data, userid) {
           } else if (keys[j].match(/r1g4/) !== null) {
             k = 3;
           }
-          console.log("Matched on " + k);
+          // console.log("Matched on " + k);
           const now = Date.now();
           // if (k == 0 && data.Items[startTimes]['r1g'+(k+1)] < now) {
           // if (data.Items[startTimes]['r1g'+(k+1)] < now) {
@@ -292,7 +292,7 @@ app.get(path + '/week1' + hashKeyPath + sortKeyPath, function(req, res) {
       // res.json(data.Items);
       // console.log("Got " + data.Items.length + " items");
       res.json(items);
-      console.log("Got " + items.length + " items");
+      // console.log("Got " + items.length + " items");
     }
   });
 });
@@ -351,7 +351,12 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
 * HTTP put method for insert object *
 *************************************/
 
-app.put(path, function(req, res) {
+app.put(path + '/putter' + hashKeyPath + sortKeyPath, function(req, res) {
+// app.put(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
+// app.put(path, function(req, res) {
+
+  console.log("In update ");// + req.params[partitionKeyName] + " " + req.body['content']);
+  console.log(req.body['r1g1']);
 
   if (userIdPresent) {
 //    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
@@ -360,13 +365,57 @@ app.put(path, function(req, res) {
 
   let putItemParams = {
     TableName: tableName,
-    Item: req.body
+    Key: { "id": req.body[partitionKeyName] },
+//    Key: { "id": "1575911024048" },
+    UpdateExpression: "set r1g1 = :g1",
+    ExpressionAttributeValues: { ":g1": req.body['r1g1'] },
+//    ExpressionAttributeValues: { ":c": "Updated" },
+    ReturnValues: "UPDATED_NEW"
   }
-  dynamodb.put(putItemParams, (err, data) => {
+  dynamodb.update(putItemParams, (err, data) => {
     if(err) {
+      console.log("Update had an error " + err);
       res.statusCode = 500;
       res.json({error: err, url: req.url, body: req.body});
     } else{
+      console.log("Update succeeded");
+      res.json({success: 'put call succeed!', url: req.url, data: data})
+    }
+  });
+});
+
+/************************************
+* HTTP put method for insert object *
+*************************************/
+
+app.put(path, function(req, res) {
+// app.put(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
+// app.put(path, function(req, res) {
+
+  console.log("In update ");// + req.params[partitionKeyName] + " " + req.body['content']);
+  console.log(req.body['r1g1']);
+
+  if (userIdPresent) {
+//    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+    req.body[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+  }
+
+  let putItemParams = {
+    TableName: tableName,
+    Key: { "id": req.body[partitionKeyName] },
+//    Key: { "id": "1575911024048" },
+    UpdateExpression: "set r1g1 = :g1",
+    ExpressionAttributeValues: { ":g1": req.body['r1g1'] },
+//    ExpressionAttributeValues: { ":c": "Updated" },
+    ReturnValues: "UPDATED_NEW"
+  }
+  dynamodb.update(putItemParams, (err, data) => {
+    if(err) {
+      console.log("Update had an error " + err);
+      res.statusCode = 500;
+      res.json({error: err, url: req.url, body: req.body});
+    } else{
+      console.log("Update succeeded");
       res.json({success: 'put call succeed!', url: req.url, data: data})
     }
   });

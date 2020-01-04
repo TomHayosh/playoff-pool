@@ -1,7 +1,7 @@
 {
-    "httpMethod": "GET",
-    "body": "{\"name\": \"Amplify\"}",
-    "path": "/items",
+    "httpMethod": "PUT",
+    "body": "{\"name\": \"Amplify\", \"r1g1\": -17}",
+    "path": "/items/putter/1234",
     "resource": "/{proxy+}",
     "queryStringParameters": {}
 }

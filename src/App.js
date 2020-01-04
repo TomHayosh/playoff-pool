@@ -117,10 +117,26 @@ class App extends Component {
     this.fetchData();
   };
 
+  update = async event => {
+    alert("In uptaesdfgas");
+    event.preventDefault();
+    await API.put("ppoolApi", "/items", {
+      body: {
+        firstarg: "asdf",
+        r1g1: -14
+      }
+    });
+    this.fetchData();
+  };
+
   render() {
     return (
       <div className="App">
         {this.state.idFound ? (
+          <div>
+          <form onSubmit={this.update}>
+              <button type="submit" className="btn btn-primary"> Submit </button>
+          </form>
           <MDBDataTable
             striped
             bordered
@@ -129,6 +145,7 @@ class App extends Component {
             searching={false}
             data={this.state.table}
           />
+          </div>
         ) : (this.state.newEntrant ? (
           <div>
             <h1>Click here to join the pool for $20</h1>
@@ -146,7 +163,7 @@ class App extends Component {
 const MyTheme = {
   googleSignInButton: { backgroundColor: "red", borderColor: "red" },
   button: { backgroundColor: "blue", borderColor: "red" },
-  navButton: { backgroundColor: "red" },
+  navButton: { backgroundColor: "blue" },
   signInButtonIcon: { display: "none" }
 };
 
