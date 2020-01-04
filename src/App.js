@@ -57,7 +57,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    await this.fetchData();
+    await this.fetchData(true);
     /*
     await API.post("ppoolApi", "/items", {
       body: {
@@ -68,7 +68,7 @@ class App extends Component {
     */
   }
 
-  async fetchData() {
+  async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
     if (response1['id'] !== undefined) {
       this.setState({idFound: true});
@@ -89,7 +89,7 @@ class App extends Component {
           picks[p] = '' + picks[p] + response[i]['edit-r1g' + (p+1)];
         }
         temptable.rows[j++] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
-      } else {
+      } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
           for (var g = 1; g <= 4; g++) {
             temptable.columns[g].label = response[i]['r1g' + g] + ' ' + temptable.columns[g].label;
@@ -118,12 +118,11 @@ class App extends Component {
   };
 
   update = async event => {
-    alert("In uptaesdfgas");
     event.preventDefault();
     await API.put("ppoolApi", "/items", {
       body: {
         firstarg: "asdf",
-        r1g1: -14
+        r1g1: 7
       }
     });
     this.fetchData();
