@@ -16,6 +16,7 @@ class App extends Component {
       newEntrant: false,
       idFound: false,
       errorResponse: true,
+      r1g1: 0,
       list: [],
       item: {},
       table: {
@@ -104,6 +105,11 @@ class App extends Component {
     this.setState({table: temptable});
   }
 
+  handleChange = event => {
+    const id = event.target.id;
+    this.setState({ [id]: event.target.value });
+  };
+
   handleSubmit = async event => {
     event.preventDefault();
     await API.post("ppoolApi", "/items", {
@@ -122,7 +128,7 @@ class App extends Component {
     await API.put("ppoolApi", "/items", {
       body: {
         firstarg: "asdf",
-        r1g1: 7
+        r1g1: this.state.r1g1
       }
     });
     this.fetchData();
@@ -134,6 +140,11 @@ class App extends Component {
         {this.state.idFound ? (
           <div>
           <form onSubmit={this.update}>
+              <legend>Add</legend>
+              <div className="form-group">
+                  <label htmlFor="r1g1">Game 1</label>
+                  <input type="number" className="form-control" id="r1g1" value={this.state.r1g1} onChange={this.handleChange} />
+              </div>
               <button type="submit" className="btn btn-primary"> Submit </button>
           </form>
           <MDBDataTable

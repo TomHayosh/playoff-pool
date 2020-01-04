@@ -54,18 +54,28 @@ const convertUrlType = (param, type) => {
   }
 }
 
-const processStartTimes = function(data, userid) {
-  var newitems = [];
-  var startTimes = -1;
-  var i;
-  for (i = 0; i < data.Items.length; i++) {
-    if (data.Items[i]['id'] === 'startTime') {
-      startTimes = i;
-      // console.log("startTimes = " + startTimes);
+const startTimesIndex = function(items) {
+  var index = -1;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i]['id'] === 'startTime') {
+      index = i;
+      // console.log("startTimes = " + index);
       break;
     }
   }
+  return index;
+}
 
+const gameStarted = function(startTimes, round, game, now) {
+  return (Date.parse(startTimes['r' + round + 'g' + game]) < now);
+}
+
+const processStartTimes = function(data, userid) {
+  var newitems = [];
+  var startTimes = startTimesIndex(data.Items);
+  const now = Date.now();
+
+  var i;
   for (i = 0; i < data.Items.length; i++) {
     if (data.Items[i]['realPerson'] === false) {
       newitems[i] = {...data.Items[i]};
@@ -76,31 +86,15 @@ const processStartTimes = function(data, userid) {
         if (keys[j].match(/r1g/) === null){
           item[keys[j]] = data.Items[i][keys[j]];
         } else {
-          var k = -1;
-          if (keys[j].match(/r1g1/) !== null) {
-            k = 0;
-          } else if (keys[j].match(/r1g2/) !== null) {
-            k = 1;
-          } else if (keys[j].match(/r1g3/) !== null) {
-            k = 2;
-          } else if (keys[j].match(/r1g4/) !== null) {
-            k = 3;
-          }
-          // console.log("Matched on " + k);
-          const now = Date.now();
-          // if (k == 0 && data.Items[startTimes]['r1g'+(k+1)] < now) {
-          // if (data.Items[startTimes]['r1g'+(k+1)] < now) {
+          var k = Number.parseInt(keys[j][3]);
+          const hasStarted = gameStarted(data.Items[startTimes], 1, k, now);
           item[keys[j]] = "";
-          for (var g = 1; g <= 4; g++) {
-            if (k == g-1 && Date.parse(data.Items[startTimes]['r1g'+g]) < now || data.Items[i]['id'] === userid) {
-              item[keys[j]] = data.Items[i][keys[j]];
-            }
+          if (hasStarted || data.Items[i]['id'] === userid) {
+            item[keys[j]] = data.Items[i][keys[j]];
           }
           item['edit-'+keys[j]] = false;
-          for (var g = 1; g <= 4; g++) {
-            if (k == g-1 && Date.parse(data.Items[startTimes]['r1g'+g]) > now && data.Items[i]['id'] === userid) {
-              item['edit-'+keys[j]] = true;
-            }
+          if (!hasStarted && data.Items[i]['id'] === userid) {
+            item['edit-'+keys[j]] = true;
           }
         }
       }
