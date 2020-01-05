@@ -404,6 +404,7 @@ app.put(path, function(req, res) {
   let queryParams = {
     TableName: tableName
   }
+  let tempBody = req.body;
   // dynamodb.query(queryParams, (err, data) => {
   dynamodb.scan(queryParams, (err, data) => {
     if (err) {
@@ -415,22 +416,48 @@ app.put(path, function(req, res) {
         req.body[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
       }
 
-      var round = 1;
-      var game = 1;
       var startTimes = startTimesIndex(data.Items);
       const now = Date.now();
-      const hasStarted = gameStarted(data.Items[startTimes], round, game, now);
-      if (hasStarted) {
-        console.log("Can't update. Round " + round + " game " + game + " has started");
-        res.json({error: "Can't update. Round " + round + " game " + game + " has started", url: req.url, body: req.body})
-      } else {
-        console.log("Can update round " + round + " game " + game);
+      var gamesToUpdate = 0;
+      var updateExpression = "set ";
+      var expressionAttributeValues = "{ ";
+      var round = 1;
+      var game = 1;
+      for (game = 4; game > 0; game--) {
+        const hasStarted = gameStarted(data.Items[startTimes], round, game, now);
+        if (hasStarted) {
+          console.log("Can't update. Round " + round + " game " + game + " has started");
+          //res.json({error: "Can't update. Round " + round + " game " + game + " has started", url: req.url, body: req.body})
+          break;
+        } else {
+          console.log("Can update round " + round + " game " + game);
+          if (gamesToUpdate > 0) {
+            updateExpression += ", ";
+            expressionAttributeValues += ", ";
+          }
+          gamesToUpdate++;
+          rg = "r" + round + "g" + game;
+          updateExpression += rg + " = :" + rg;
+          // expressionAttributeValues[rg] = req.body[rg];
+          // console.log(JSON.stringify(expressionAttributeValues));
+          expressionAttributeValues += '":' + rg + '": ' + 10;
+          // expressionAttributeValues += '":' + rg + '": ' + req.body['r'+round+'g'+game];
+          console.log('r'+round+'g'+game);
+          console.log(req.body['r'+round+'g'+game]);
+          console.log("Game 2 is " + req.body['r1g2'] + " or " + tempBody['r1g2']);
+          console.log(expressionAttributeValues);
+        }
+      }
+      expressionAttributeValues += ' }';
+      console.log("updateExpression = " + updateExpression);
+      console.log(expressionAttributeValues);
+      if (gamesToUpdate > 0) {
         let putItemParams = {
           TableName: tableName,
           Key: { "id": req.body[partitionKeyName] },
           // Key: { "id": "1575911024048" },
-          UpdateExpression: "set r1g1 = :g1",
-          ExpressionAttributeValues: { ":g1": req.body['r1g1'] },
+          UpdateExpression: updateExpression,//"set r1g1 = :g1",
+          ExpressionAttributeValues: JSON.parse(expressionAttributeValues),//{ ":g1": req.body['r1g1'] },
           // ExpressionAttributeValues: { ":c": "Updated" },
           ReturnValues: "UPDATED_NEW"
         }

@@ -137,7 +137,10 @@ class App extends Component {
     const response = await API.put("ppoolApi", "/items", {
       body: {
         firstarg: "asdf",
-        r1g1: this.state.r1g1
+        r1g1: this.state.r1g1,
+        r1g2: this.state.r1g2,
+        r1g3: this.state.r1g3,
+        r1g4: this.state.r1g4
       }
     });
     if (response['error'] !== undefined) {
