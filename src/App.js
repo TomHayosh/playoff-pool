@@ -32,6 +32,12 @@ class App extends Component {
             width: 150
           },
           {
+            label: 'Total',
+            field: 'total',
+            sort: 'asc',
+            width: 150
+          },
+          {
             label: 'at',
             field: 'r1g1',
             sort: 'asc',
@@ -75,13 +81,36 @@ class App extends Component {
 
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
+    var game1started = true;
     if (response1['id'] !== undefined) {
+      if (response1['edit-r1g1'] === undefined) {
+        response1['edit-r1g1'] = true;
+      }
+      if (response1['edit-r1g2'] === undefined) {
+        response1['edit-r1g2'] = true;
+      }
+      if (response1['edit-r1g3'] === undefined) {
+        response1['edit-r1g3'] = true;
+      }
+      if (response1['edit-r1g4'] === undefined) {
+        response1['edit-r1g4'] = true;
+      }
+      game1started = response1['edit-r1g1'];
+      alert("" + response1['r1g1'] + ": " + response1['edit-r1g1'] + ", "
+          + response1['r1g2'] + ": " + response1['edit-r1g2'] + ", "
+      );
       this.setState({
         idFound: true,
         r1g1: response1['r1g1'],
         r1g2: response1['r1g2'],
         r1g3: response1['r1g3'],
-        r1g4: response1['r1g4']
+        r1g4: response1['r1g4'],
+        r1edit: [
+          response1['edit-r1g1'],
+          response1['edit-r1g2'],
+          response1['edit-r1g3'],
+          response1['edit-r1g4']
+        ]
       });
     } else if (response1['newEntrant']) {
       this.setState({newEntrant: true});
@@ -94,22 +123,33 @@ class App extends Component {
       if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         var editable = [false, false, false, false];
+        var total = 0;
         for (var p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
           }
           editable[p] = response[i]['edit-r1g' + (p+1)];
+          // TODO: game1started cannot be based on editable
+          // game1started = game1started || editable[p];
         }
-        temptable.rows[j++] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
-        this.setState({r1edit: [...editable]});
+        temptable.rows[j] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
+        /*
+        alert ("i = " + i + ", g1s = " + game1started);
+        */
+        if (game1started) {
+          temptable.rows[j]['total'] = 50;
+        }
+        j++;
+        // this.setState({r1edit: [...editable]});
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
+          // TODO: Fix hard coded g index. Match on 'at' instead
           for (var g = 1; g <= 4; g++) {
-            temptable.columns[g].label = response[i]['r1g' + g] + ' ' + temptable.columns[g].label;
+            temptable.columns[g+1].label = response[i]['r1g' + g] + ' ' + temptable.columns[g+1].label;
           }
         } else if (response[i]['id'] === 'homeTeam') {
           for (var g = 1; g <= 4; g++) {
-            temptable.columns[g].label = temptable.columns[g].label + ' ' + response[i]['r1g' + g];
+            temptable.columns[g+1].label = temptable.columns[g+1].label + ' ' + response[i]['r1g' + g];
           }
         }
       }
