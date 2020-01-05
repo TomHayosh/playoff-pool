@@ -125,12 +125,15 @@ class App extends Component {
 
   update = async event => {
     event.preventDefault();
-    await API.put("ppoolApi", "/items", {
+    const response = await API.put("ppoolApi", "/items", {
       body: {
         firstarg: "asdf",
         r1g1: this.state.r1g1
       }
     });
+    if (response['error'] !== undefined) {
+      alert(response['error']);
+    }
     this.fetchData();
   };
 
