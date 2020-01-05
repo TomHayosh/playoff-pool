@@ -66,6 +66,18 @@ const startTimesIndex = function(items) {
   return index;
 }
 
+const currentUserIndex = function(items, userid) {
+  var index = -1;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i]['id'] === userid) {
+      index = i;
+      // console.log("startTimes = " + index);
+      break;
+    }
+  }
+  return index;
+}
+
 const gameStarted = function(startTimes, round, game, now) {
   return (Date.parse(startTimes['r' + round + 'g' + game]) < now);
 }
@@ -389,28 +401,50 @@ app.put(path, function(req, res) {
   console.log("In update ");// + req.params[partitionKeyName] + " " + req.body['content']);
   console.log(req.body['r1g1']);
 
-  if (userIdPresent) {
-//    req.body['userId'] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
-    req.body[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+  let queryParams = {
+    TableName: tableName
   }
-
-  let putItemParams = {
-    TableName: tableName,
-    Key: { "id": req.body[partitionKeyName] },
-//    Key: { "id": "1575911024048" },
-    UpdateExpression: "set r1g1 = :g1",
-    ExpressionAttributeValues: { ":g1": req.body['r1g1'] },
-//    ExpressionAttributeValues: { ":c": "Updated" },
-    ReturnValues: "UPDATED_NEW"
-  }
-  dynamodb.update(putItemParams, (err, data) => {
-    if(err) {
-      console.log("Update had an error " + err);
+  // dynamodb.query(queryParams, (err, data) => {
+  dynamodb.scan(queryParams, (err, data) => {
+    if (err) {
       res.statusCode = 500;
-      res.json({error: err, url: req.url, body: req.body});
-    } else{
-      console.log("Update succeeded");
-      res.json({success: 'put call succeed!', url: req.url, data: data})
+      res.json({error: 'Could not load items: ' + err});
+      console.log("Error getting week1: " + err);
+    } else {
+      if (userIdPresent) {
+        req.body[partitionKeyName] = req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH;
+      }
+
+      var round = 1;
+      var game = 1;
+      var startTimes = startTimesIndex(data.Items);
+      const now = Date.now();
+      const hasStarted = gameStarted(data.Items[startTimes], round, game, now);
+      if (hasStarted) {
+        console.log("Can't update. Round " + round + " game " + game + " has started");
+        res.json({error: "Can't update. Round " + round + " game " + game + " has started", url: req.url, body: req.body})
+      } else {
+        console.log("Can update round " + round + " game " + game);
+        let putItemParams = {
+          TableName: tableName,
+          Key: { "id": req.body[partitionKeyName] },
+          // Key: { "id": "1575911024048" },
+          UpdateExpression: "set r1g1 = :g1",
+          ExpressionAttributeValues: { ":g1": req.body['r1g1'] },
+          // ExpressionAttributeValues: { ":c": "Updated" },
+          ReturnValues: "UPDATED_NEW"
+        }
+        dynamodb.update(putItemParams, (err, data) => {
+          if(err) {
+            console.log("Update had an error " + err);
+            res.statusCode = 500;
+            res.json({error: err, url: req.url, body: req.body});
+          } else{
+            console.log("Update succeeded");
+            res.json({success: 'put call succeed!', url: req.url, data: data})
+          }
+        });
+      }
     }
   });
 });
