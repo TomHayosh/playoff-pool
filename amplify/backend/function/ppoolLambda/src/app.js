@@ -431,6 +431,7 @@ app.put(path, function(req, res) {
           break;
         } else {
           console.log("Can update round " + round + " game " + game);
+          // SHOULD CHECK IF req.body['r'+round+'g'+game] !== undefined before proceeding!!!
           if (gamesToUpdate > 0) {
             updateExpression += ", ";
             expressionAttributeValues += ", ";
@@ -438,13 +439,9 @@ app.put(path, function(req, res) {
           gamesToUpdate++;
           rg = "r" + round + "g" + game;
           updateExpression += rg + " = :" + rg;
-          // expressionAttributeValues[rg] = req.body[rg];
-          // console.log(JSON.stringify(expressionAttributeValues));
-          expressionAttributeValues += '":' + rg + '": ' + 10;
-          // expressionAttributeValues += '":' + rg + '": ' + req.body['r'+round+'g'+game];
+          expressionAttributeValues += '":' + rg + '": ' + req.body['r'+round+'g'+game];
           console.log('r'+round+'g'+game);
           console.log(req.body['r'+round+'g'+game]);
-          console.log("Game 2 is " + req.body['r1g2'] + " or " + tempBody['r1g2']);
           console.log(expressionAttributeValues);
         }
       }
