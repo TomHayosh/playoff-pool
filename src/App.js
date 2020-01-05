@@ -20,6 +20,7 @@ class App extends Component {
       r1g2: 0,
       r1g3: 0,
       r1g4: 0,
+      r1edit: [false, false, false, false],
       list: [],
       item: {},
       table: {
@@ -92,13 +93,15 @@ class App extends Component {
     for (var i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
+        var editable = [false, false, false, false];
         for (var p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
           }
-          picks[p] = '' + picks[p] + response[i]['edit-r1g' + (p+1)];
+          editable[p] = response[i]['edit-r1g' + (p+1)];
         }
         temptable.rows[j++] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
+        this.setState({r1edit: [...editable]});
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
           for (var g = 1; g <= 4; g++) {
@@ -156,22 +159,30 @@ class App extends Component {
           <div>
           <form onSubmit={this.update}>
               <legend>Add</legend>
+              {this.state.r1edit[0] ?
               <div className="form-group">
                   <label htmlFor="r1g1">Game 1</label>
                   <input type="number" className="form-control" id="r1g1" value={this.state.r1g1} onChange={this.handleChange} />
               </div>
+              : <div/> }
+              {this.state.r1edit[1] ?
               <div className="form-group">
                   <label htmlFor="r1g2">Game 2</label>
                   <input type="number" className="form-control" id="r1g2" value={this.state.r1g2} onChange={this.handleChange} />
               </div>
+              : <div/> }
+              {this.state.r1edit[2] ?
               <div className="form-group">
                   <label htmlFor="r1g3">Game 3</label>
                   <input type="number" className="form-control" id="r1g3" value={this.state.r1g3} onChange={this.handleChange} />
               </div>
+              : <div/> }
+              {this.state.r1edit[3] ?
               <div className="form-group">
                   <label htmlFor="r1g4">Game 4</label>
                   <input type="number" className="form-control" id="r1g4" value={this.state.r1g4} onChange={this.handleChange} />
               </div>
+              : <div/> }
               <button type="submit" className="btn btn-primary"> Submit </button>
           </form>
           <MDBDataTable
