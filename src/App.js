@@ -17,6 +17,9 @@ class App extends Component {
       idFound: false,
       errorResponse: true,
       r1g1: 0,
+      r1g2: 0,
+      r1g3: 0,
+      r1g4: 0,
       list: [],
       item: {},
       table: {
@@ -72,7 +75,13 @@ class App extends Component {
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
     if (response1['id'] !== undefined) {
-      this.setState({idFound: true});
+      this.setState({
+        idFound: true,
+        r1g1: response1['r1g1'],
+        r1g2: response1['r1g2'],
+        r1g3: response1['r1g3'],
+        r1g4: response1['r1g4']
+      });
     } else if (response1['newEntrant']) {
       this.setState({newEntrant: true});
     }
@@ -147,6 +156,18 @@ class App extends Component {
               <div className="form-group">
                   <label htmlFor="r1g1">Game 1</label>
                   <input type="number" className="form-control" id="r1g1" value={this.state.r1g1} onChange={this.handleChange} />
+              </div>
+              <div className="form-group">
+                  <label htmlFor="r1g2">Game 2</label>
+                  <input type="number" className="form-control" id="r1g2" value={this.state.r1g2} onChange={this.handleChange} />
+              </div>
+              <div className="form-group">
+                  <label htmlFor="r1g3">Game 3</label>
+                  <input type="number" className="form-control" id="r1g3" value={this.state.r1g3} onChange={this.handleChange} />
+              </div>
+              <div className="form-group">
+                  <label htmlFor="r1g4">Game 4</label>
+                  <input type="number" className="form-control" id="r1g4" value={this.state.r1g4} onChange={this.handleChange} />
               </div>
               <button type="submit" className="btn btn-primary"> Submit </button>
           </form>
