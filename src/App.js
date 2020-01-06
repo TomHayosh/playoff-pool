@@ -113,12 +113,8 @@ class App extends Component {
             editable[p] = response[i]['edit-r1g' + (p+1)];
           }
         }
-        temptable.rows[j] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
-        if (!editable[0]) {
-          temptable.rows[j]['total'] = total;
-        }
+        temptable.rows[j++] = {name: response[i]['fullname'], total: total, r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
         this.setState({r1edit: [...editable]});
-        j++;
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
           // TODO: Fix hard coded g index. Match on 'at' instead
