@@ -108,7 +108,6 @@ class App extends Component {
     this.setState({ list: { ...response }, showDetails: true });
     var temptable = {...this.state.table};
     var j = 0;
-    var game1started = false;
     var editable = [false, false, false, false];
     for (var i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] != false) {
@@ -125,9 +124,9 @@ class App extends Component {
           if (isCurrentUserHack) {
             editable[p] = response[i]['edit-r1g' + (p+1)];
           }
-          game1started = game1started || editable[p];        }
+        }
         temptable.rows[j] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
-        if (game1started) {
+        if (!editable[0]) {
           temptable.rows[j]['total'] = total;
         }
         this.setState({r1edit: [...editable]});
