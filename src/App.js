@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import logo from './logo.svg';
-import { MDBDataTable } from 'mdbreact';
+import { MDBDataTable, MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact';
 import Amplify, { API } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
@@ -81,7 +81,6 @@ class App extends Component {
 
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
-    var game1started = true;
     if (response1['id'] !== undefined) {
       if (response1['edit-r1g1'] === undefined) {
         response1['edit-r1g1'] = true;
@@ -95,22 +94,12 @@ class App extends Component {
       if (response1['edit-r1g4'] === undefined) {
         response1['edit-r1g4'] = true;
       }
-      game1started = response1['edit-r1g1'];
-      alert("" + response1['r1g1'] + ": " + response1['edit-r1g1'] + ", "
-          + response1['r1g2'] + ": " + response1['edit-r1g2'] + ", "
-      );
       this.setState({
         idFound: true,
         r1g1: response1['r1g1'],
         r1g2: response1['r1g2'],
         r1g3: response1['r1g3'],
-        r1g4: response1['r1g4'],
-        r1edit: [
-          response1['edit-r1g1'],
-          response1['edit-r1g2'],
-          response1['edit-r1g3'],
-          response1['edit-r1g4']
-        ]
+        r1g4: response1['r1g4']
       });
     } else if (response1['newEntrant']) {
       this.setState({newEntrant: true});
@@ -119,28 +108,30 @@ class App extends Component {
     this.setState({ list: { ...response }, showDetails: true });
     var temptable = {...this.state.table};
     var j = 0;
+    var game1started = false;
+    var editable = [false, false, false, false];
     for (var i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
-        var editable = [false, false, false, false];
+        const isCurrentUserHack = response[i]['edit-r1g1'] ||
+          response[i]['edit-r1g2'] ||
+          response[i]['edit-r1g3'] ||
+          response[i]['edit-r1g1'];
         var total = 0;
         for (var p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
           }
-          editable[p] = response[i]['edit-r1g' + (p+1)];
-          // TODO: game1started cannot be based on editable
-          // game1started = game1started || editable[p];
-        }
+          if (isCurrentUserHack) {
+            editable[p] = response[i]['edit-r1g' + (p+1)];
+          }
+          game1started = game1started || editable[p];        }
         temptable.rows[j] = {name: response[i]['fullname'], r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
-        /*
-        alert ("i = " + i + ", g1s = " + game1started);
-        */
         if (game1started) {
-          temptable.rows[j]['total'] = 50;
+          temptable.rows[j]['total'] = total;
         }
+        this.setState({r1edit: [...editable]});
         j++;
-        // this.setState({r1edit: [...editable]});
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
           // TODO: Fix hard coded g index. Match on 'at' instead
@@ -198,31 +189,45 @@ class App extends Component {
         {this.state.idFound ? (
           <div>
           <form onSubmit={this.update}>
-              <legend>Add</legend>
-              {this.state.r1edit[0] ?
-              <div className="form-group">
-                  <label htmlFor="r1g1">Game 1</label>
-                  <input type="number" className="form-control" id="r1g1" value={this.state.r1g1} onChange={this.handleChange} />
-              </div>
-              : <div/> }
-              {this.state.r1edit[1] ?
-              <div className="form-group">
-                  <label htmlFor="r1g2">Game 2</label>
-                  <input type="number" className="form-control" id="r1g2" value={this.state.r1g2} onChange={this.handleChange} />
-              </div>
-              : <div/> }
-              {this.state.r1edit[2] ?
-              <div className="form-group">
-                  <label htmlFor="r1g3">Game 3</label>
-                  <input type="number" className="form-control" id="r1g3" value={this.state.r1g3} onChange={this.handleChange} />
-              </div>
-              : <div/> }
-              {this.state.r1edit[3] ?
-              <div className="form-group">
-                  <label htmlFor="r1g4">Game 4</label>
-                  <input type="number" className="form-control" id="r1g4" value={this.state.r1g4} onChange={this.handleChange} />
-              </div>
-              : <div/> }
+              <legend>2020 NFL Wild Card Round</legend>
+              <MDBContainer>
+                  <MDBRow>
+                    {this.state.r1edit[0] ?
+                    <MDBCol sm="3" size="12">Game 1</MDBCol>
+                    : <span/> }
+                    {this.state.r1edit[1] ?
+                    <MDBCol sm="3" size="12">Game 2</MDBCol>
+                    : <span/> }
+                    {this.state.r1edit[2] ?
+                    <MDBCol sm="3" size="12">Game 3</MDBCol>
+                    : <span/> }
+                    {this.state.r1edit[3] ?
+                    <MDBCol sm="3" size="12">Game 4</MDBCol>
+                    : <span/> }
+                </MDBRow>
+                <MDBRow>
+                    {this.state.r1edit[0] ?
+                    <MDBCol sm="3" size="12">
+                      <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
+                    </MDBCol>
+                    : <span/> }
+                    {this.state.r1edit[1] ?
+                    <MDBCol sm="3" size="12">
+                      <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
+                    </MDBCol>
+                    : <span/> }
+                    {this.state.r1edit[2] ?
+                    <MDBCol sm="3" size="12">
+                      <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
+                    </MDBCol>
+                    : <span/> }
+                    {this.state.r1edit[3] ?
+                    <MDBCol sm="3" size="12">
+                      <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
+                    </MDBCol>
+                    : <span/> }
+                </MDBRow>
+              </MDBContainer>
               <button type="submit" className="btn btn-primary"> Submit </button>
           </form>
           <MDBDataTable
