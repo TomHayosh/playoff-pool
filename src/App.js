@@ -82,18 +82,6 @@ class App extends Component {
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
     if (response1['id'] !== undefined) {
-      if (response1['edit-r1g1'] === undefined) {
-        response1['edit-r1g1'] = true;
-      }
-      if (response1['edit-r1g2'] === undefined) {
-        response1['edit-r1g2'] = true;
-      }
-      if (response1['edit-r1g3'] === undefined) {
-        response1['edit-r1g3'] = true;
-      }
-      if (response1['edit-r1g4'] === undefined) {
-        response1['edit-r1g4'] = true;
-      }
       this.setState({
         idFound: true,
         r1g1: response1['r1g1'],
@@ -115,7 +103,7 @@ class App extends Component {
         const isCurrentUserHack = response[i]['edit-r1g1'] ||
           response[i]['edit-r1g2'] ||
           response[i]['edit-r1g3'] ||
-          response[i]['edit-r1g1'];
+          response[i]['edit-r1g4'];
         var total = 0;
         for (var p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
