@@ -21,6 +21,7 @@ class App extends Component {
       r1g3: 0,
       r1g4: 0,
       r1edit: [false, false, false, false],
+      margins: [0, 0, 0, 0],
       list: [],
       item: {},
       table: {
@@ -97,8 +98,32 @@ class App extends Component {
     var temptable = {...this.state.table};
     var j = 0;
     var editable = [false, false, false, false];
+    var gamestarted = [true, true, true, true];
     for (var i = 0; i < response.length; i++) {
-      if (response[i]['realPerson'] != false) {
+      const isCurrentUserHack = response[i]['edit-r1g1'] ||
+        response[i]['edit-r1g2'] ||
+        response[i]['edit-r1g3'] ||
+        response[i]['edit-r1g4'];
+        if (isCurrentUserHack) {
+          gamestarted = [
+              !response[i]['edit-r1g1'],
+              !response[i]['edit-r1g2'],
+              !response[i]['edit-r1g3'],
+              !response[i]['edit-r1g4']
+          ]
+        }
+    }
+    for (var i = 0; i < response.length; i++) {
+      if (response[i]['fullname'] === "margin") {
+        this.setState({
+          margins: [
+            response[i]['r1g1'],
+            response[i]['r1g2'],
+            response[i]['r1g3'],
+            response[i]['r1g4']
+          ]
+        })
+      } else if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         const isCurrentUserHack = response[i]['edit-r1g1'] ||
           response[i]['edit-r1g2'] ||
@@ -108,6 +133,9 @@ class App extends Component {
         for (var p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
+            if (gamestarted[p]) {
+              total += Math.abs(picks[p] - this.state.margins[p]);
+            }
           }
           if (isCurrentUserHack) {
             editable[p] = response[i]['edit-r1g' + (p+1)];
@@ -211,7 +239,9 @@ class App extends Component {
                     : <span/> }
                 </MDBRow>
               </MDBContainer>
+                    {this.state.r1edit[3] ?
               <button type="submit" className="btn btn-primary"> Submit </button>
+                    : <span/> }
           </form>
           <MDBDataTable
             striped
