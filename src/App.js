@@ -230,11 +230,24 @@ class App extends Component {
     event.preventDefault();
     const response = await API.put("ppoolApi", "/items", {
       body: {
-        firstarg: "asdf",
         r1g1: this.state.r1g1,
         r1g2: this.state.r1g2,
         r1g3: this.state.r1g3,
         r1g4: this.state.r1g4
+      }
+    });
+    if (response['error'] !== undefined) {
+      alert(response['error']);
+    }
+    this.fetchData();
+  };
+
+  update2 = async event => {
+    event.preventDefault();
+    const response = await API.put("ppoolApi", "/items", {
+      body: {
+        r2g1: this.state.r2g1,
+        r2g2: this.state.r2g2
       }
     });
     if (response['error'] !== undefined) {
@@ -253,44 +266,44 @@ class App extends Component {
               <MDBContainer>
                   <MDBRow>
                     {!this.state.r1started[0] ?
-                    <MDBCol sm="3" size="12">Game 1</MDBCol>
+                      <MDBCol sm="3" size="12">Game 1</MDBCol>
                     : <span/> }
                     {!this.state.r1started[1] ?
-                    <MDBCol sm="3" size="12">Game 2</MDBCol>
+                      <MDBCol sm="3" size="12">Game 2</MDBCol>
                     : <span/> }
                     {!this.state.r1started[2] ?
-                    <MDBCol sm="3" size="12">Game 3</MDBCol>
+                      <MDBCol sm="3" size="12">Game 3</MDBCol>
                     : <span/> }
                     {!this.state.r1started[3] ?
-                    <MDBCol sm="3" size="12">Game 4</MDBCol>
+                      <MDBCol sm="3" size="12">Game 4</MDBCol>
                     : <span/> }
-                </MDBRow>
-                <MDBRow>
+                  </MDBRow>
+                  <MDBRow>
                     {!this.state.r1started[0] ?
-                    <MDBCol sm="3" size="12">
-                      <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
-                    </MDBCol>
+                      <MDBCol sm="3" size="12">
+                        <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
+                      </MDBCol>
                     : <span/> }
                     {!this.state.r1started[1] ?
-                    <MDBCol sm="3" size="12">
-                      <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
-                    </MDBCol>
+                      <MDBCol sm="3" size="12">
+                        <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
+                      </MDBCol>
                     : <span/> }
                     {!this.state.r1started[2] ?
-                    <MDBCol sm="3" size="12">
-                      <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
-                    </MDBCol>
+                      <MDBCol sm="3" size="12">
+                        <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
+                      </MDBCol>
                     : <span/> }
                     {!this.state.r1started[3] ?
-                    <MDBCol sm="3" size="12">
-                      <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
-                    </MDBCol>
+                      <MDBCol sm="3" size="12">
+                        <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
+                      </MDBCol>
                     : <span/> }
-                </MDBRow>
+                  </MDBRow>
               </MDBContainer>
-                    {!this.state.r1started[3] ?
+            {!this.state.r1started[3] ?
               <button type="submit" className="btn btn-primary"> Submit </button>
-                    : <span/> }
+            : <span/> }
           </form>
           {this.state.r1ended[3] ?
             <div>
