@@ -131,6 +131,7 @@ class App extends Component {
             picks[p] = response[i]['r1g' + (p+1)];
             if (gamestarted[p]) {
               total += Math.abs(picks[p] - this.state.r1margins[p]);
+              picks[p] += " (" + (Math.abs(picks[p] - this.state.r1margins[p])) + ")";
             }
           }
         }
@@ -144,6 +145,10 @@ class App extends Component {
         } else if (response[i]['id'] === 'homeTeam') {
           for (var g = 1; g <= 4; g++) {
             temptable.columns[g+1].label = temptable.columns[g+1].label + ' ' + response[i]['r1g' + g];
+            if (gamestarted[g-1]) {
+              // TODO: Make this independent of response row ordering. Away team side doesn't work.
+              temptable.columns[g+1].label += " (" + this.state.r1margins[g-1] + ")";
+            }
           }
         }
       }
