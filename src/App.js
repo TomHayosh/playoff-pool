@@ -135,7 +135,7 @@ class App extends Component {
       this.setState({newEntrant: true});
     }
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
-    var temptable = {...this.state.r1table};
+    var tempgrid1 = {...this.state.r1table};
     var j = 0;
     var gamestarted = [true, true, true, true];
     for (var i = 0; i < response.length; i++) {
@@ -184,25 +184,25 @@ class App extends Component {
             }
           }
         }
-        temptable.rows[j++] = {name: response[i]['fullname'], total: total, r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
+        tempgrid1.rows[j++] = {name: response[i]['fullname'], total: total, r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
           // TODO: Fix hard coded g index. Match on 'at' instead
           for (var g = 1; g <= 4; g++) {
-            temptable.columns[g+1].label = response[i]['r1g' + g] + ' ' + temptable.columns[g+1].label;
+            tempgrid1.columns[g+1].label = response[i]['r1g' + g] + ' ' + tempgrid1.columns[g+1].label;
           }
         } else if (response[i]['id'] === 'homeTeam') {
           for (var g = 1; g <= 4; g++) {
-            temptable.columns[g+1].label = temptable.columns[g+1].label + ' ' + response[i]['r1g' + g];
+            tempgrid1.columns[g+1].label = tempgrid1.columns[g+1].label + ' ' + response[i]['r1g' + g];
             if (gamestarted[g-1]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
-              temptable.columns[g+1].label += " (" + this.state.r1margins[g-1] + ")";
+              tempgrid1.columns[g+1].label += " (" + this.state.r1margins[g-1] + ")";
             }
           }
         }
       }
     }
-    this.setState({r1table: temptable});
+    this.setState({r1table: tempgrid1});
   }
 
   handleChange = event => {
