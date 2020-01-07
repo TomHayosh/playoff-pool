@@ -31,7 +31,7 @@ class App extends Component {
             width: 150
           },
           {
-            label: 'Total',
+            label: <span id="r1TotalHeader">Total</span>,
             field: 'total',
             sort: 'asc',
             width: 150
@@ -68,6 +68,8 @@ class App extends Component {
 
   async componentDidMount() {
     await this.fetchData(true);
+    var el = document.getElementById("r1TotalHeader");
+    el.click();
     /*
     await API.post("ppoolApi", "/items", {
       body: {
