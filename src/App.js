@@ -22,9 +22,7 @@ class App extends Component {
       r1g4: 0,
       r1started: [true, true, true, true],
       r1margins: [0, 0, 0, 0],
-      list: [],
-      item: {},
-      table: {
+      r1table: {
         columns: [
           {
             label: 'Name',
@@ -94,8 +92,7 @@ class App extends Component {
       this.setState({newEntrant: true});
     }
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
-    this.setState({ list: { ...response }, showDetails: true });
-    var temptable = {...this.state.table};
+    var temptable = {...this.state.r1table};
     var j = 0;
     var gamestarted = [true, true, true, true];
     for (var i = 0; i < response.length; i++) {
@@ -153,7 +150,7 @@ class App extends Component {
         }
       }
     }
-    this.setState({table: temptable});
+    this.setState({r1table: temptable});
   }
 
   handleChange = event => {
@@ -246,7 +243,7 @@ class App extends Component {
             hover
             paging={false}
             searching={false}
-            data={this.state.table}
+            data={this.state.r1table}
           />
           </div>
         ) : (this.state.newEntrant ? (
