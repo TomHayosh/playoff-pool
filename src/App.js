@@ -21,6 +21,7 @@ class App extends Component {
       r1g3: 0,
       r1g4: 0,
       r1started: [true, true, true, true],
+      r1ended: [false, false, false, false],
       r1margins: [0, 0, 0, 0],
       r1table: {
         columns: [
@@ -62,7 +63,47 @@ class App extends Component {
           }
         ],
         rows: []
-      } 
+      },
+      r2g1: 0,
+      r2g2: 0,
+      r2started: [true, true],
+      r2ended: [false, false],
+      r2margins: [0, 0],
+      r2table: {
+        columns: [
+          {
+            label: 'Name',
+            field: 'name',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: <span id="r2TotalHeader">Total</span>,
+            field: 'total',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'at',
+            field: 'r2g1',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'at',
+            field: 'r2g2',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Week 1 Subtotal',
+            field: 'week1total',
+            sort: 'asc',
+            width: 150
+          }
+        ],
+        rows: []
+      },
     };
   }
 
@@ -122,6 +163,15 @@ class App extends Component {
             response[i]['r1g4']
           ]
         })
+      } else if (response[i]['fullname'] === "gameEnded") {
+        this.setState({
+          r1ended: [
+            response[i]['r1g1'],
+            response[i]['r1g2'],
+            response[i]['r1g3'],
+            response[i]['r1g4']
+          ]
+        })
       } else if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         var total = 0;
@@ -164,6 +214,9 @@ class App extends Component {
     event.preventDefault();
     await API.post("ppoolApi", "/items", {
       body: {
+        r3g1: 0,
+        r2g1: 0,
+        r2g2: 0,
         r1g1: 0,
         r1g2: 0,
         r1g3: 0,
@@ -239,6 +292,19 @@ class App extends Component {
               <button type="submit" className="btn btn-primary"> Submit </button>
                     : <span/> }
           </form>
+          {this.state.r1ended[3] ?
+            <div>
+              <MDBDataTable
+                striped
+                bordered
+                hover
+                paging={false}
+                searching={false}
+                data={this.state.r2table}
+              />
+              <legend>2020 NFL Wild Card Round</legend>
+            </div>
+          : <span/> }
           <MDBDataTable
             striped
             bordered
