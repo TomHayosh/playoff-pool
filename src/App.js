@@ -20,8 +20,8 @@ class App extends Component {
       r1g2: 0,
       r1g3: 0,
       r1g4: 0,
-      r1edit: [false, false, false, false],
-      margins: [0, 0, 0, 0],
+      r1started: [true, true, true, true],
+      r1margins: [0, 0, 0, 0],
       list: [],
       item: {},
       table: {
@@ -97,7 +97,6 @@ class App extends Component {
     this.setState({ list: { ...response }, showDetails: true });
     var temptable = {...this.state.table};
     var j = 0;
-    var editable = [false, false, false, false];
     var gamestarted = [true, true, true, true];
     for (var i = 0; i < response.length; i++) {
       const isCurrentUserHack = response[i]['edit-r1g1'] ||
@@ -112,11 +111,12 @@ class App extends Component {
               !response[i]['edit-r1g4']
           ]
         }
+        this.setState({r1started: [...gamestarted]});
     }
     for (var i = 0; i < response.length; i++) {
       if (response[i]['fullname'] === "margin") {
         this.setState({
-          margins: [
+          r1margins: [
             response[i]['r1g1'],
             response[i]['r1g2'],
             response[i]['r1g3'],
@@ -125,24 +125,16 @@ class App extends Component {
         })
       } else if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
-        const isCurrentUserHack = response[i]['edit-r1g1'] ||
-          response[i]['edit-r1g2'] ||
-          response[i]['edit-r1g3'] ||
-          response[i]['edit-r1g4'];
         var total = 0;
         for (var p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
             if (gamestarted[p]) {
-              total += Math.abs(picks[p] - this.state.margins[p]);
+              total += Math.abs(picks[p] - this.state.r1margins[p]);
             }
-          }
-          if (isCurrentUserHack) {
-            editable[p] = response[i]['edit-r1g' + (p+1)];
           }
         }
         temptable.rows[j++] = {name: response[i]['fullname'], total: total, r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
-        this.setState({r1edit: [...editable]});
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
           // TODO: Fix hard coded g index. Match on 'at' instead
@@ -203,43 +195,43 @@ class App extends Component {
               <legend>2020 NFL Wild Card Round</legend>
               <MDBContainer>
                   <MDBRow>
-                    {this.state.r1edit[0] ?
+                    {!this.state.r1started[0] ?
                     <MDBCol sm="3" size="12">Game 1</MDBCol>
                     : <span/> }
-                    {this.state.r1edit[1] ?
+                    {!this.state.r1started[1] ?
                     <MDBCol sm="3" size="12">Game 2</MDBCol>
                     : <span/> }
-                    {this.state.r1edit[2] ?
+                    {!this.state.r1started[2] ?
                     <MDBCol sm="3" size="12">Game 3</MDBCol>
                     : <span/> }
-                    {this.state.r1edit[3] ?
+                    {!this.state.r1started[3] ?
                     <MDBCol sm="3" size="12">Game 4</MDBCol>
                     : <span/> }
                 </MDBRow>
                 <MDBRow>
-                    {this.state.r1edit[0] ?
+                    {!this.state.r1started[0] ?
                     <MDBCol sm="3" size="12">
                       <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
                     </MDBCol>
                     : <span/> }
-                    {this.state.r1edit[1] ?
+                    {!this.state.r1started[1] ?
                     <MDBCol sm="3" size="12">
                       <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
                     </MDBCol>
                     : <span/> }
-                    {this.state.r1edit[2] ?
+                    {!this.state.r1started[2] ?
                     <MDBCol sm="3" size="12">
                       <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
                     </MDBCol>
                     : <span/> }
-                    {this.state.r1edit[3] ?
+                    {!this.state.r1started[3] ?
                     <MDBCol sm="3" size="12">
                       <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
                     </MDBCol>
                     : <span/> }
                 </MDBRow>
               </MDBContainer>
-                    {this.state.r1edit[3] ?
+                    {!this.state.r1started[3] ?
               <button type="submit" className="btn btn-primary"> Submit </button>
                     : <span/> }
           </form>
