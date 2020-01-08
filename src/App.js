@@ -158,7 +158,8 @@ class App extends Component {
               !response[i]['edit-r3g1']
           ]
         }
-        this.setState({r1started: [...gamestarted]});
+        this.setState({r1started: [gamestarted[0], gamestarted[1], gamestarted[2], gamestarted[3]]});
+        this.setState({r2started: [gamestarted[4], gamestarted[5]]});
     }
     for (var i = 0; i < response.length; i++) {
       if (response[i]['fullname'] === "margin") {
@@ -291,50 +292,81 @@ class App extends Component {
       <div className="App">
         {this.state.idFound ? (
           <div>
-          <form onSubmit={this.update}>
-              <legend>2020 NFL Divisional Round</legend>
-              <MDBContainer>
-                  <MDBRow>
-                    {!this.state.r1started[0] ?
-                      <MDBCol sm="3" size="12">Game 1</MDBCol>
-                    : <span/> }
-                    {!this.state.r1started[1] ?
-                      <MDBCol sm="3" size="12">Game 2</MDBCol>
-                    : <span/> }
-                    {!this.state.r1started[2] ?
-                      <MDBCol sm="3" size="12">Game 3</MDBCol>
-                    : <span/> }
-                    {!this.state.r1started[3] ?
-                      <MDBCol sm="3" size="12">Game 4</MDBCol>
-                    : <span/> }
-                  </MDBRow>
-                  <MDBRow>
-                    {!this.state.r1started[0] ?
-                      <MDBCol sm="3" size="12">
-                        <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
-                      </MDBCol>
-                    : <span/> }
-                    {!this.state.r1started[1] ?
-                      <MDBCol sm="3" size="12">
-                        <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
-                      </MDBCol>
-                    : <span/> }
-                    {!this.state.r1started[2] ?
-                      <MDBCol sm="3" size="12">
-                        <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
-                      </MDBCol>
-                    : <span/> }
-                    {!this.state.r1started[3] ?
-                      <MDBCol sm="3" size="12">
-                        <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
-                      </MDBCol>
-                    : <span/> }
-                  </MDBRow>
-              </MDBContainer>
-            {!this.state.r1started[3] ?
-              <button type="submit" className="btn btn-primary"> Submit </button>
-            : <span/> }
-          </form>
+          {this.state.r1ended[3] ? (
+            <form onSubmit={this.update2}>
+                <legend>2020 NFL Conference Round</legend>
+                <MDBContainer>
+                    <MDBRow>
+                      {!this.state.r2started[0] ?
+                        <MDBCol sm="3" size="12">Game 1</MDBCol>
+                      : <span/> }
+                      {!this.state.r2started[1] ?
+                        <MDBCol sm="3" size="12">Game 2</MDBCol>
+                      : <span/> }
+                    </MDBRow>
+                    <MDBRow>
+                      {!this.state.r2started[0] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r2g1' value={this.state.r2g1} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                      {!this.state.r2started[1] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r2g2' value={this.state.r2g2} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                    </MDBRow>
+                </MDBContainer>
+              {!this.state.r2started[1] ?
+                <button type="submit" className="btn btn-primary"> Submit </button>
+              : <span/> }
+            </form>
+            ) : (
+            <form onSubmit={this.update}>
+                <legend>2020 NFL Divisional Round</legend>
+                <MDBContainer>
+                    <MDBRow>
+                      {!this.state.r1started[0] ?
+                        <MDBCol sm="3" size="12">Game 1</MDBCol>
+                      : <span/> }
+                      {!this.state.r1started[1] ?
+                        <MDBCol sm="3" size="12">Game 2</MDBCol>
+                      : <span/> }
+                      {!this.state.r1started[2] ?
+                        <MDBCol sm="3" size="12">Game 3</MDBCol>
+                      : <span/> }
+                      {!this.state.r1started[3] ?
+                        <MDBCol sm="3" size="12">Game 4</MDBCol>
+                      : <span/> }
+                    </MDBRow>
+                    <MDBRow>
+                      {!this.state.r1started[0] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                      {!this.state.r1started[1] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                      {!this.state.r1started[2] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                      {!this.state.r1started[3] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                    </MDBRow>
+                </MDBContainer>
+              {!this.state.r1started[3] ?
+                <button type="submit" className="btn btn-primary"> Submit </button>
+              : <span/> }
+            </form>
+          )}
           {this.state.r1ended[3] ?
             <div>
               <MDBDataTable
