@@ -422,9 +422,9 @@ app.put(path, function(req, res) {
       var gamesToUpdate = 0;
       var updateExpression = "set ";
       var expressionAttributeValues = "{ ";
-      var round = 1;
-      var game = 1;
-      for (game = 4; game > 0; game--) {
+      var round = req.body['round'];
+      const numgames = [0, 4, 2, 1];
+      for (var game = numgames[round]; game > 0; game--) {
         const hasStarted = gameStarted(data.Items[startTimes], round, game, now);
         if (hasStarted) {
           console.log("Can't update. Round " + round + " game " + game + " has started");
