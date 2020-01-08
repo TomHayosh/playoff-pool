@@ -242,9 +242,10 @@ class App extends Component {
               tempgrid1.columns[g+1].label += " (" + this.state.r1margins[g-1] + ")";
             }
           }
+          var delta = 4;
           for (var g = 1; g <= 2; g++) {
-            tempgrid2.columns[g+1].label = tempgrid2.columns[g+1].label + ' ' + response[i]['r1g' + g];
-            if (gamestarted[g-1]) {
+            tempgrid2.columns[g+1].label = tempgrid2.columns[g+1].label + ' ' + response[i]['r2g' + g];
+            if (gamestarted[g-1+delta]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
               tempgrid2.columns[g+1].label += " (" + this.state.r2margins[g-1] + ")";
             }
