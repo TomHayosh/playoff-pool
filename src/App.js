@@ -104,6 +104,45 @@ class App extends Component {
         ],
         rows: []
       },
+      r3g1: 0,
+      r3started: [true],
+      r3ended: [false],
+      r3margins: [0],
+      r3table: {
+        columns: [
+          {
+            label: 'Name',
+            field: 'name',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: <span id="r3TotalHeader">Total</span>,
+            field: 'total',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'at',
+            field: 'r3g1',
+            sort: 'asc',
+            width: 270
+          },
+          {
+            label: 'Week 2 Subtotal',
+            field: 'week2total',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'Week 1 Subtotal',
+            field: 'week1total',
+            sort: 'asc',
+            width: 150
+          }
+        ],
+        rows: []
+      },
     };
   }
 
@@ -115,6 +154,12 @@ class App extends Component {
     if (el !== undefined) {
       el.click();
     }
+    /*
+    el = document.getElementById("r3TotalHeader");
+    if (el !== undefined) {
+      el.click();
+    }
+    */
     /*
     await API.post("ppoolApi", "/items", {
       body: {
@@ -144,6 +189,7 @@ class App extends Component {
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
     var tempgrid1 = {...this.state.r1table};
     var tempgrid2 = {...this.state.r2table};
+    var tempgrid3 = {...this.state.r3table};
     var j = 0;
     var gamestarted = [true, true, true, true, true, true, true];
     for (var i = 0; i < response.length; i++) {
@@ -167,6 +213,7 @@ class App extends Component {
         }
         this.setState({r1started: [gamestarted[0], gamestarted[1], gamestarted[2], gamestarted[3]]});
         this.setState({r2started: [gamestarted[4], gamestarted[5]]});
+        this.setState({r3started: [gamestarted[6]]});
     }
     for (var i = 0; i < response.length; i++) {
       if (response[i]['fullname'] === "margin") {
@@ -184,6 +231,11 @@ class App extends Component {
             response[i]['r2g2']
           ]
         });
+        this.setState({
+          r3margins: [
+            response[i]['r3g1']
+          ]
+        });
       } else if (response[i]['fullname'] === "gameEnded") {
         this.setState({
           r1ended: [
@@ -197,6 +249,11 @@ class App extends Component {
           r2ended: [
             response[i]['r2g1'],
             response[i]['r2g2']
+          ]
+        });
+        this.setState({
+          r3ended: [
+            response[i]['r3g1']
           ]
         });
       } else if (response[i]['realPerson'] != false) {
@@ -224,6 +281,18 @@ class App extends Component {
           }
         }
         tempgrid2.rows[j] = {name: response[i]['fullname'], total: total, r2g1: picks[0], r2g2: picks[1], week1total: week1total};
+        var week2total = total;
+        var delta = 6;
+        for (var p = 0; p < 1; p++) {
+          if (response[i]['r3g' + (p+1)] !== undefined) {
+            picks[p] = response[i]['r3g' + (p+1)];
+            if (gamestarted[p+delta]) {
+              total += Math.abs(picks[p] - this.state.r3margins[p]);
+              picks[p] += " (" + (Math.abs(picks[p] - this.state.r3margins[p])) + ")";
+            }
+          }
+        }
+        tempgrid3.rows[j] = {name: response[i]['fullname'], total: total, r3g1: picks[0], week2total: week2total, week1total: week1total};
         j++;
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
@@ -233,6 +302,9 @@ class App extends Component {
           }
           for (var g = 1; g <= 2; g++) {
             tempgrid2.columns[g+1].label = response[i]['r2g' + g] + ' ' + tempgrid2.columns[g+1].label;
+          }
+          for (var g = 1; g <= 1; g++) {
+            tempgrid3.columns[g+1].label = response[i]['r3g' + g] + ' ' + tempgrid3.columns[g+1].label;
           }
         } else if (response[i]['id'] === 'homeTeam') {
           for (var g = 1; g <= 4; g++) {
@@ -250,11 +322,20 @@ class App extends Component {
               tempgrid2.columns[g+1].label += " (" + this.state.r2margins[g-1] + ")";
             }
           }
+          var delta = 6;
+          for (var g = 1; g <= 1; g++) {
+            tempgrid3.columns[g+1].label = tempgrid3.columns[g+1].label + ' ' + response[i]['r3g' + g];
+            if (gamestarted[g-1+delta]) {
+              // TODO: Make this independent of response row ordering. Away team side doesn't work.
+              tempgrid3.columns[g+1].label += " (" + this.state.r3margins[g-1] + ")";
+            }
+          }
         }
       }
     }
     this.setState({r1table: tempgrid1});
     this.setState({r2table: tempgrid2});
+    this.setState({r3table: tempgrid3});
   }
 
   handleChange = event => {
@@ -302,6 +383,20 @@ class App extends Component {
         round: 2,
         r2g1: this.state.r2g1,
         r2g2: this.state.r2g2
+      }
+    });
+    if (response['error'] !== undefined) {
+      alert(response['error']);
+    }
+    this.fetchData();
+  };
+
+  update3 = async event => {
+    event.preventDefault();
+    const response = await API.put("ppoolApi", "/items", {
+      body: {
+        round: 2,
+        r3g1: this.state.r3g1
       }
     });
     if (response['error'] !== undefined) {
