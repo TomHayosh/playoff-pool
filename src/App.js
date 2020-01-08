@@ -515,7 +515,7 @@ class App extends Component {
                 searching={false}
                 data={this.state.r3table}
               />
-              <legend>2020! NFL Conference Championships</legend>
+              <legend>2020 NFL Conference Championships</legend>
             </div>
           : <span/> }
           {this.state.r1ended[3] ?
@@ -528,7 +528,7 @@ class App extends Component {
                 searching={false}
                 data={this.state.r2table}
               />
-              <legend>2020! NFL Divisional Round</legend>
+              <legend>2020 NFL Divisional Round</legend>
             </div>
           : <span/> }
           <MDBDataTable
@@ -542,11 +542,27 @@ class App extends Component {
           </div>
         ) : (this.state.newEntrant ? (
           <div>
-            <h1>Click here to join the pool for $20</h1>
-            <button onClick={this.handleSubmit}>JOIN!!!</button>
+            <h1>Welcome to the 2020 NFL Playoff Pool!</h1>
+            <button onClick={this.handleSubmit}>TL;DR. Join the pool for $20!</button><p/>
+            <p>The pool runs for 3 rounds, Divisional playoffs through Super Bowl.
+            For each game in the round, you'll pick a winner and a margin of victory.<br/>
+            You accumulate points based on the difference between your predicted margin and the actual outcome.<br/>
+            Points are doubled in Week 2 and multiplied by 4 in the Super Bowl. The goal is to have the fewest total points at the end.</p>
+            <p><strong>EXAMPLE:</strong> You pick the Packers to win by 3. They lose by 7. You were off by 10.<br/>
+            In the first round, this would cost you 10 points.
+            In the second round, 20 points.
+            In the Super Bowl, 40 points!</p>
+            <p>Entry fee is $20 and should be paid prior to the first game on Saturday.<br/>
+            Payment can be made via PayPal to thayosh@gmail.com.<br/>
+            Please use the friends and family option to avoid PayPal fees being deducted.</p>
+            <p><strong>PAYOUT:</strong><br/>
+            <strong>3rd Place</strong>- Gets the $20 back<br/>
+            <strong>2nd Place</strong>- 30% of the remaining pot<br/>
+            <strong>1st Place</strong>- 70% of the remaining pot</p>
+            <button onClick={this.handleSubmit}>Join the pool!</button>
             </div>
           ) : (
-            <h1>Default state</h1>
+            <h1></h1>
           )
         )}
       </div>
