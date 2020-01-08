@@ -412,7 +412,7 @@ class App extends Component {
           <div>
           {this.state.r1ended[3] ? (
             <form onSubmit={this.update2}>
-                <legend>2020 NFL Conference Round</legend>
+                <legend>2020 NFL Conference Championships</legend>
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r2started[0] ?
@@ -485,6 +485,19 @@ class App extends Component {
               : <span/> }
             </form>
           )}
+          {this.state.r2ended[1] ?
+            <div>
+              <MDBDataTable
+                striped
+                bordered
+                hover
+                paging={false}
+                searching={false}
+                data={this.state.r3table}
+              />
+              <legend>2020 NFL Conference Championships</legend>
+            </div>
+          : <span/> }
           {this.state.r1ended[3] ?
             <div>
               <MDBDataTable
