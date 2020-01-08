@@ -177,7 +177,13 @@ class App extends Component {
             response[i]['r1g3'],
             response[i]['r1g4']
           ]
-        })
+        });
+        this.setState({
+          r2margins: [
+            response[i]['r2g1'],
+            response[i]['r2g2']
+          ]
+        });
       } else if (response[i]['fullname'] === "gameEnded") {
         this.setState({
           r1ended: [
@@ -186,7 +192,13 @@ class App extends Component {
             response[i]['r1g3'],
             response[i]['r1g4']
           ]
-        })
+        });
+        this.setState({
+          r2ended: [
+            response[i]['r2g1'],
+            response[i]['r2g2']
+          ]
+        });
       } else if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         var total = 0;
@@ -234,7 +246,7 @@ class App extends Component {
             tempgrid2.columns[g+1].label = tempgrid2.columns[g+1].label + ' ' + response[i]['r1g' + g];
             if (gamestarted[g-1]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
-              tempgrid2.columns[g+1].label += " (" + this.state.r1margins[g-1] + ")";
+              tempgrid2.columns[g+1].label += " (" + this.state.r2margins[g-1] + ")";
             }
           }
         }
