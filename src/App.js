@@ -408,7 +408,7 @@ class App extends Component {
       <div className="App">
         {this.state.idFound ? (
           <div>
-          {this.state.r1ended[3] ? (
+          {this.state.r1ended[3] && this.state.r2ended[1] ? (
             <form onSubmit={this.update3}>
                 <legend>2020 NFL Super Bowl</legend>
                 <MDBContainer>
@@ -429,7 +429,7 @@ class App extends Component {
                 <button type="submit" className="btn btn-primary"> Submit </button>
               : <span/> }
             </form>
-            ) :  <span/>//<legend>2020 NFL Conference Championships</legend>
+            ) : <legend>2020 NFL Conference Championships</legend>
         }
            {this.state.r1ended[3] ? (
             <form onSubmit={this.update2}>
