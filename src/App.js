@@ -151,15 +151,13 @@ class App extends Component {
     var el = document.getElementById("r1TotalHeader");
     el.click();
     el = document.getElementById("r2TotalHeader");
-    if (el !== undefined) {
+    if (el !== null) {
       el.click();
     }
-    /*
     el = document.getElementById("r3TotalHeader");
-    if (el !== undefined) {
+    if (el !== null) {
       el.click();
     }
-    */
     /*
     await API.post("ppoolApi", "/items", {
       body: {
@@ -275,7 +273,7 @@ class App extends Component {
           if (response[i]['r2g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r2g' + (p+1)];
             if (gamestarted[p+delta]) {
-              total += Math.abs(picks[p] - this.state.r2margins[p]);
+              total += 2 * (Math.abs(picks[p] - this.state.r2margins[p]));
               picks[p] += " (" + (Math.abs(picks[p] - this.state.r2margins[p])) + ")";
             }
           }
@@ -287,7 +285,7 @@ class App extends Component {
           if (response[i]['r3g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r3g' + (p+1)];
             if (gamestarted[p+delta]) {
-              total += Math.abs(picks[p] - this.state.r3margins[p]);
+              total += 4 * (Math.abs(picks[p] - this.state.r3margins[p]));
               picks[p] += " (" + (Math.abs(picks[p] - this.state.r3margins[p])) + ")";
             }
           }
@@ -395,7 +393,7 @@ class App extends Component {
     event.preventDefault();
     const response = await API.put("ppoolApi", "/items", {
       body: {
-        round: 2,
+        round: 3,
         r3g1: this.state.r3g1
       }
     });
@@ -411,8 +409,30 @@ class App extends Component {
         {this.state.idFound ? (
           <div>
           {this.state.r1ended[3] ? (
+            <form onSubmit={this.update3}>
+                <legend>2020 NFL Super Bowl</legend>
+                <MDBContainer>
+                    <MDBRow>
+                      {!this.state.r3started[0] ?
+                        <MDBCol sm="3" size="12">Game 1</MDBCol>
+                      : <span/> }
+                    </MDBRow>
+                    <MDBRow>
+                      {!this.state.r3started[0] ?
+                        <MDBCol sm="3" size="12">
+                          <MDBInput id='r3g1' value={this.state.r3g1} type="number" onChange={this.handleChange}/>
+                        </MDBCol>
+                      : <span/> }
+                    </MDBRow>
+                </MDBContainer>
+              {!this.state.r3started[0] ?
+                <button type="submit" className="btn btn-primary"> Submit </button>
+              : <span/> }
+            </form>
+            ) :  <span/>//<legend>2020 NFL Conference Championships</legend>
+        }
+           {this.state.r1ended[3] ? (
             <form onSubmit={this.update2}>
-                <legend>2020 NFL Conference Championships</legend>
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r2started[0] ?
@@ -495,7 +515,7 @@ class App extends Component {
                 searching={false}
                 data={this.state.r3table}
               />
-              <legend>2020 NFL Conference Championships</legend>
+              <legend>2020! NFL Conference Championships</legend>
             </div>
           : <span/> }
           {this.state.r1ended[3] ?
@@ -508,7 +528,7 @@ class App extends Component {
                 searching={false}
                 data={this.state.r2table}
               />
-              <legend>2020 NFL Divisional Round</legend>
+              <legend>2020! NFL Divisional Round</legend>
             </div>
           : <span/> }
           <MDBDataTable
