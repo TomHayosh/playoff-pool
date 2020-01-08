@@ -111,6 +111,10 @@ class App extends Component {
     await this.fetchData(true);
     var el = document.getElementById("r1TotalHeader");
     el.click();
+    el = document.getElementById("r2TotalHeader");
+    if (el !== undefined) {
+      el.click();
+    }
     /*
     await API.post("ppoolApi", "/items", {
       body: {
@@ -129,7 +133,10 @@ class App extends Component {
         r1g1: response1['r1g1'],
         r1g2: response1['r1g2'],
         r1g3: response1['r1g3'],
-        r1g4: response1['r1g4']
+        r1g4: response1['r1g4'],
+        r2g1: response1['r2g1'],
+        r2g2: response1['r2g2'],
+        r3g1: response1['r3g1']
       });
     } else if (response1['newEntrant']) {
       this.setState({newEntrant: true});
@@ -193,6 +200,7 @@ class App extends Component {
           }
         }
         tempgrid1.rows[j] = {name: response[i]['fullname'], total: total, r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
+        var week1total = total;
         var delta = 4;
         for (var p = 0; p < 2; p++) {
           if (response[i]['r2g' + (p+1)] !== undefined) {
@@ -203,7 +211,7 @@ class App extends Component {
             }
           }
         }
-        tempgrid2.rows[j] = {name: response[i]['fullname'], total: total, r2g1: picks[0], r2g2: picks[1]};
+        tempgrid2.rows[j] = {name: response[i]['fullname'], total: total, r2g1: picks[0], r2g2: picks[1], week1total: week1total};
         j++;
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
@@ -261,6 +269,7 @@ class App extends Component {
     event.preventDefault();
     const response = await API.put("ppoolApi", "/items", {
       body: {
+        round: 1,
         r1g1: this.state.r1g1,
         r1g2: this.state.r1g2,
         r1g3: this.state.r1g3,
@@ -277,6 +286,7 @@ class App extends Component {
     event.preventDefault();
     const response = await API.put("ppoolApi", "/items", {
       body: {
+        round: 2,
         r2g1: this.state.r2g1,
         r2g2: this.state.r2g2
       }
