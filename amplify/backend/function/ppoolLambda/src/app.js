@@ -95,11 +95,12 @@ const processStartTimes = function(data, userid) {
       var item = {};
       const keys = Object.keys(data.Items[i]);
       for (var j = 0; j < keys.length; j++) {
-        if (keys[j].match(/r1g/) === null){
+        if (keys[j].match(/r1g/) === null && keys[j].match(/r2g/) === null && keys[j].match(/r3g/) === null) {
           item[keys[j]] = data.Items[i][keys[j]];
         } else {
-          var k = Number.parseInt(keys[j][3]);
-          const hasStarted = gameStarted(data.Items[startTimes], 1, k, now);
+          var round = Number.parseInt(keys[j][1]);
+          var game = Number.parseInt(keys[j][3]);
+          const hasStarted = gameStarted(data.Items[startTimes], round, game, now);
           item[keys[j]] = "";
           if (hasStarted || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
