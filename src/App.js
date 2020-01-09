@@ -429,9 +429,11 @@ class App extends Component {
                 <button type="submit" className="btn btn-primary"> Submit </button>
               : <span/> }
             </form>
-            ) : <legend>2020 NFL Conference Championships</legend>
+            ) : <span/>
         }
            {this.state.r1ended[3] ? (
+            <div>
+            <legend>2020 NFL Conference Championships</legend>
             <form onSubmit={this.update2}>
                 <MDBContainer>
                     <MDBRow>
@@ -459,6 +461,7 @@ class App extends Component {
                 <button type="submit" className="btn btn-primary"> Submit </button>
               : <span/> }
             </form>
+            </div>
             ) : (
             <form onSubmit={this.update}>
                 <legend>2020 NFL Divisional Round</legend>
@@ -501,7 +504,10 @@ class App extends Component {
                     </MDBRow>
                 </MDBContainer>
               {!this.state.r1started[3] ?
-                <button type="submit" className="btn btn-primary"> Submit </button>
+                <div>
+                <button type="submit" className="btn btn-primary"> Submit Round 1 Picks </button>
+                <p/>
+                </div>
               : <span/> }
             </form>
           )}
