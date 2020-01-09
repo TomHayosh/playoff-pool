@@ -468,44 +468,43 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r1started[0] ?
-                        <MDBCol sm="3" size="12">Game 1</MDBCol>
-                      : <span/> }
-                      {!this.state.r1started[1] ?
-                        <MDBCol sm="3" size="12">Game 2</MDBCol>
-                      : <span/> }
-                      {!this.state.r1started[2] ?
-                        <MDBCol sm="3" size="12">Game 3</MDBCol>
-                      : <span/> }
-                      {!this.state.r1started[3] ?
-                        <MDBCol sm="3" size="12">Game 4</MDBCol>
-                      : <span/> }
-                    </MDBRow>
-                    <MDBRow>
-                      {!this.state.r1started[0] ?
                         <MDBCol sm="3" size="12">
-                          <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
+                          <div>
+                            Game 1<br/>
+                            <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
+                          </div>
                         </MDBCol>
                       : <span/> }
                       {!this.state.r1started[1] ?
                         <MDBCol sm="3" size="12">
-                          <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
+                          <div>
+                            Game 2<br/>
+                            <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
+                          </div>
                         </MDBCol>
                       : <span/> }
                       {!this.state.r1started[2] ?
                         <MDBCol sm="3" size="12">
-                          <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
+                          <div>
+                            Game 3<br/>
+                            <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
+                          </div>
                         </MDBCol>
                       : <span/> }
                       {!this.state.r1started[3] ?
                         <MDBCol sm="3" size="12">
-                          <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
+                          <div>
+                            Game 4<br/>
+                            <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
+                          </div>
                         </MDBCol>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
               {!this.state.r1started[3] ?
                 <div>
-                <button type="submit" className="btn btn-primary"> Submit Round 1 Picks </button>
+                  <small>Use negative numbers to pick the away team, positive for the home team</small><br/>
+                  <button type="submit" className="btn btn-primary"> Submit Round 1 Picks </button>
                 <p/>
                 </div>
               : <span/> }
