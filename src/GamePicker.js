@@ -2,7 +2,7 @@ import React from "react";
 import { MDBDataTable, MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact';
 
 export default props => (
-  <div>
+  <MDBCol sm="3" size="12">
     <MDBInput
       label={props.label + 
                       " (" + 
@@ -20,4 +20,4 @@ export default props => (
                       + ")"
       } 
       id={props.id} value={props.val} type="number" onChange={props.fakeChange}/>
-  </div>);
+  </MDBCol>);

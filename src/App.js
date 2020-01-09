@@ -478,24 +478,16 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r1started[0] ?
-                        <MDBCol sm="3" size="12">
                           <GamePicker label={this.state.r1table['columns'][2]['label']} id='r1g1' val={this.state['r1g1']} onChange={this.handleChange} fakeChange={this.fakeChange}/>
-                        </MDBCol>
                       : <span/> }
                       {!this.state.r1started[1] ?
-                        <MDBCol sm="3" size="12">
                           <GamePicker label={this.state.r1table['columns'][3]['label']} id='r1g2' val={this.state['r1g2']} onChange={this.handleChange} fakeChange={this.fakeChange}/>
-                        </MDBCol>
                       : <span/> }
                       {!this.state.r1started[2] ?
-                        <MDBCol sm="3" size="12">
                           <GamePicker label={this.state.r1table['columns'][4]['label']} id='r1g3' val={this.state['r1g3']} onChange={this.handleChange} fakeChange={this.fakeChange}/>
-                        </MDBCol>
                       : <span/> }
                       {!this.state.r1started[3] ?
-                        <MDBCol sm="3" size="12">
                           <GamePicker label={this.state.r1table['columns'][5]['label']} id='r1g4' val={this.state['r1g4']} onChange={this.handleChange} fakeChange={this.fakeChange}/>
-                        </MDBCol>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
