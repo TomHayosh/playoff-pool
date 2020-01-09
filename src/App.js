@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import GamePicker from "./GamePicker";
 import logo from './logo.svg';
 import { MDBDataTable, MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact';
 import Amplify, { API } from "aws-amplify";
@@ -336,6 +337,12 @@ class App extends Component {
     this.setState({r3table: tempgrid3});
   }
 
+  fakeChange = event => {
+    // const id = event.target.id;
+    // this.setState({ [id]: event.target.value });
+    this.setState({ [event.target.id]: event.target.value});
+  };
+
   handleChange = event => {
     const id = event.target.id;
     this.setState({ [id]: event.target.value });
@@ -465,46 +472,35 @@ class App extends Component {
             ) : (
             <form onSubmit={this.update}>
                 <legend>2020 NFL Divisional Round</legend>
+              {!this.state.r1started[3] ?
+                  <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
+              : <span/> }
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r1started[0] ?
                         <MDBCol sm="3" size="12">
-                          <div>
-                            {this.state.r1table['columns'][2]['label']}<br/>
-                            <MDBInput id='r1g1' value={this.state.r1g1} type="number" onChange={this.handleChange}/>
-                            <small>(TEAM by 99)</small>
-                          </div>
+                          <GamePicker label={this.state.r1table['columns'][2]['label']} id='r1g1' val={this.state.r1g1} onChange={this.handleChange} fakeChange={this.fakeChange}/>
                         </MDBCol>
                       : <span/> }
                       {!this.state.r1started[1] ?
                         <MDBCol sm="3" size="12">
-                          <div>
-                            {this.state.r1table['columns'][3]['label']}<br/>
-                            <MDBInput id='r1g2' value={this.state.r1g2} type="number" onChange={this.handleChange}/>
-                          </div>
+                          <GamePicker label={this.state.r1table['columns'][3]['label']} id='r1g2' val={this.state.r1g2} onChange={this.handleChange} fakeChange={this.fakeChange}/>
                         </MDBCol>
                       : <span/> }
                       {!this.state.r1started[2] ?
                         <MDBCol sm="3" size="12">
-                          <div>
-                            {this.state.r1table['columns'][4]['label']}<br/>
-                            <MDBInput id='r1g3' value={this.state.r1g3} type="number" onChange={this.handleChange}/>
-                          </div>
+                          <GamePicker label={this.state.r1table['columns'][4]['label']} id='r1g3' val={this.state.r1g3} onChange={this.handleChange} fakeChange={this.fakeChange}/>
                         </MDBCol>
                       : <span/> }
                       {!this.state.r1started[3] ?
                         <MDBCol sm="3" size="12">
-                          <div>
-                            {this.state.r1table['columns'][5]['label']}<br/>
-                            <MDBInput id='r1g4' value={this.state.r1g4} type="number" onChange={this.handleChange}/>
-                          </div>
+                          <GamePicker label={this.state.r1table['columns'][5]['label']} id='r1g4' val={this.state.r1g4} onChange={this.handleChange} fakeChange={this.fakeChange}/>
                         </MDBCol>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
               {!this.state.r1started[3] ?
                 <div>
-                  <small>Use negative numbers to pick the away team, positive for the home team</small><br/>
                   <button type="submit" className="btn btn-primary"> Submit Round 1 Picks </button>
                 <p/>
                 </div>
