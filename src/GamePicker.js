@@ -19,5 +19,5 @@ export default props => (
                       )
                       + ")"
       } 
-      id={props.id} value={props.val} type="number" onChange={props.fakeChange}/>
+      id={props.id} value={props.val} type="number" onChange={props.onChange}/>
   </MDBCol>);
