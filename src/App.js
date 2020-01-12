@@ -23,7 +23,7 @@ class App extends Component {
       r1g4: 0,
       r1started: [true, true, true, true],
       r1ended: [false, false, false, false],
-      r1margins: [17, -16, 0, 0],
+      r1margins: [0, 0, 0, 0],
       r1table: {
         columns: [
           {
@@ -255,7 +255,10 @@ class App extends Component {
             response[i]['r3g1']
           ]
         });
-      } else if (response[i]['realPerson'] != false) {
+      }
+    }
+    for (var i = 0; i < response.length; i++) {
+      if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         var total = 0;
         for (var p = 0; p < 4; p++) {
