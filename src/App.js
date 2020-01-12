@@ -540,10 +540,13 @@ class App extends Component {
             <button onClick={this.handleSubmit}>Join the pool!</button>
             </div>
           ) : (
+            (this.state.newEntrant ? (
             <div>
               <h1>Sorry</h1>
               <p>Sorry, the playoff pool has started, and new entries are no longer accepted.</p>
             </div>
+            ) : (<h1></h1>)
+            )
           )
         )}
       </div>
