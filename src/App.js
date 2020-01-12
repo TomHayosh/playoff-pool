@@ -415,6 +415,9 @@ class App extends Component {
           {this.state.r1ended[3] && this.state.r2ended[1] ? (
             <form onSubmit={this.update3}>
                 <legend>2020 NFL Super Bowl</legend>
+              {!this.state.r3started[1] ?
+                  <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
+              : <span/> }
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r3started[0] ?
@@ -423,7 +426,7 @@ class App extends Component {
                     </MDBRow>
                 </MDBContainer>
               {!this.state.r3started[0] ?
-                <button type="submit" className="btn btn-primary"> Submit </button>
+                <button type="submit" className="btn btn-primary"> Submit Super Bowl Pick </button>
               : <span/> }
             </form>
             ) : <span/>
@@ -432,6 +435,9 @@ class App extends Component {
             <div>
             <legend>2020 NFL Conference Championships</legend>
             <form onSubmit={this.update2}>
+              {!this.state.r2started[1] ?
+                  <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
+              : <span/> }
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r2started[0] ?
@@ -443,7 +449,7 @@ class App extends Component {
                     </MDBRow>
                 </MDBContainer>
               {!this.state.r2started[1] ?
-                <button type="submit" className="btn btn-primary"> Submit </button>
+                <button type="submit" className="btn btn-primary"> Submit Round 2 Picks </button>
               : <span/> }
             </form>
             </div>
@@ -512,7 +518,7 @@ class App extends Component {
             data={this.state.r1table}
           />
           </div>
-        ) : (this.state.newEntrant ? (
+        ) : (this.state.newEntrant && !this.state.r1started[0]? (
           <div>
             <h1>Welcome to the 2020 NFL Playoff Pool!</h1>
             <button onClick={this.handleSubmit}>TL;DR. Join the pool for $20!</button><p/>
@@ -534,7 +540,10 @@ class App extends Component {
             <button onClick={this.handleSubmit}>Join the pool!</button>
             </div>
           ) : (
-            <h1></h1>
+            <div>
+              <h1>Sorry</h1>
+              <p>Sorry, the playoff pool has started, and new entries are no longer accepted.</p>
+            </div>
           )
         )}
       </div>
