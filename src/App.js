@@ -23,7 +23,7 @@ class App extends Component {
       r1g4: 0,
       r1started: [true, true, true, true],
       r1ended: [false, false, false, false],
-      r1margins: [0, 0, 0, 0],
+      r1margins: [17, -16, 0, 0],
       r1table: {
         columns: [
           {
