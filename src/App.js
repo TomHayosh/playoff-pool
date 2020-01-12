@@ -541,11 +541,19 @@ class App extends Component {
             </div>
           ) : (
             (this.state.newEntrant ? (
-            <div>
-              <h1>Sorry</h1>
-              <p>Sorry, the playoff pool has started, and new entries are no longer accepted.</p>
-            </div>
-            ) : (<h1></h1>)
+                <div>
+                  <h1>Sorry</h1>
+                  <p>Sorry, the playoff pool has started, and new entries are no longer accepted.</p>
+                </div>
+              ) : (
+                <div>
+                  <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
+                  <h3/>
+                  <h3>Great day 1 picks by Rita! Big on the 49ers and called the Titans upset.</h3>
+                  <h3>Bill is pretty good shape too. Everyone is still within a TD in the SB.</h3>
+                  <h3>I'll work on adding the SB points behind columns today.</h3>
+                </div>
+              )
             )
           )
         )}
