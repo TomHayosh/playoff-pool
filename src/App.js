@@ -418,14 +418,7 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r3started[0] ?
-                        <MDBCol sm="3" size="12">Game 1</MDBCol>
-                      : <span/> }
-                    </MDBRow>
-                    <MDBRow>
-                      {!this.state.r3started[0] ?
-                        <MDBCol sm="3" size="12">
-                          <MDBInput id='r3g1' value={this.state.r3g1} type="number" onChange={this.handleChange}/>
-                        </MDBCol>
+                          <GamePicker label={this.state.r3table['columns'][2]['label']} id='r3g1' val={this.state['r3g1']} onChange={this.handleChange}/>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
@@ -442,22 +435,10 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r2started[0] ?
-                        <MDBCol sm="3" size="12">Game 1</MDBCol>
+                          <GamePicker label={this.state.r2table['columns'][2]['label']} id='r2g1' val={this.state['r2g1']} onChange={this.handleChange}/>
                       : <span/> }
                       {!this.state.r2started[1] ?
-                        <MDBCol sm="3" size="12">Game 2</MDBCol>
-                      : <span/> }
-                    </MDBRow>
-                    <MDBRow>
-                      {!this.state.r2started[0] ?
-                        <MDBCol sm="3" size="12">
-                          <MDBInput id='r2g1' value={this.state.r2g1} type="number" onChange={this.handleChange}/>
-                        </MDBCol>
-                      : <span/> }
-                      {!this.state.r2started[1] ?
-                        <MDBCol sm="3" size="12">
-                          <MDBInput id='r2g2' value={this.state.r2g2} type="number" onChange={this.handleChange}/>
-                        </MDBCol>
+                          <GamePicker label={this.state.r2table['columns'][3]['label']} id='r2g2' val={this.state['r2g2']} onChange={this.handleChange}/>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>

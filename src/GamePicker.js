@@ -2,7 +2,7 @@ import React from "react";
 import { MDBDataTable, MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact';
 
 export default props => (
-  <MDBCol sm="3" size="12">
+  <MDBCol sm="6" size="12">
     <MDBInput
       label={props.label + 
                       " (" + 
