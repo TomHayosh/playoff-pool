@@ -39,6 +39,18 @@ class App extends Component {
             width: 150
           },
           {
+            label: 'Behind',
+            field: 'ptsBehind',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'SB Pts',
+            field: 'sbPoints',
+            sort: 'asc',
+            width: 150
+          },
+          {
             label: 'at',
             field: 'r1g1',
             sort: 'asc',
@@ -257,7 +269,26 @@ class App extends Component {
         });
       }
     }
-    for (var i = 0; i < response.length; i++) {
+    var r1min = 100000;
+    for (i = 0; i < response.length; i++) {
+      if (response[i]['realPerson'] != false) {
+        var picks = ['', '', '', ''];
+        var total = 0;
+        for (var p = 0; p < 4; p++) {
+          if (response[i]['r1g' + (p+1)] !== undefined) {
+            picks[p] = response[i]['r1g' + (p+1)];
+            if (gamestarted[p]) {
+              total += Math.abs(picks[p] - this.state.r1margins[p]);
+              // picks[p] += " (" + (Math.abs(picks[p] - this.state.r1margins[p])) + ")";
+            }
+          }
+        }
+        if (total < r1min) {
+          r1min = total;
+        }
+      }
+    }
+    for (i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
         var total = 0;
@@ -270,7 +301,9 @@ class App extends Component {
             }
           }
         }
-        tempgrid1.rows[j] = {name: response[i]['fullname'], total: total, r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
+        var ptsBehind = Math.abs(total-r1min)
+        tempgrid1.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
+          r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
         var week1total = total;
         var delta = 4;
         for (var p = 0; p < 2; p++) {
@@ -300,7 +333,7 @@ class App extends Component {
         if (response[i]['id'] === 'awayTeam') {
           // TODO: Fix hard coded g index. Match on 'at' instead
           for (var g = 1; g <= 4; g++) {
-            tempgrid1.columns[g+1].label = response[i]['r1g' + g] + ' ' + tempgrid1.columns[g+1].label;
+            tempgrid1.columns[g+3].label = response[i]['r1g' + g] + ' ' + tempgrid1.columns[g+3].label;
           }
           for (var g = 1; g <= 2; g++) {
             tempgrid2.columns[g+1].label = response[i]['r2g' + g] + ' ' + tempgrid2.columns[g+1].label;
@@ -310,10 +343,10 @@ class App extends Component {
           }
         } else if (response[i]['id'] === 'homeTeam') {
           for (var g = 1; g <= 4; g++) {
-            tempgrid1.columns[g+1].label = tempgrid1.columns[g+1].label + ' ' + response[i]['r1g' + g];
+            tempgrid1.columns[g+3].label = tempgrid1.columns[g+3].label + ' ' + response[i]['r1g' + g];
             if (gamestarted[g-1]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
-              tempgrid1.columns[g+1].label += " (" + this.state.r1margins[g-1] + ")";
+              tempgrid1.columns[g+3].label += " (" + this.state.r1margins[g-1] + ")";
             }
           }
           var delta = 4;
