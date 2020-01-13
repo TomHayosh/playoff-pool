@@ -97,6 +97,18 @@ class App extends Component {
             width: 150
           },
           {
+            label: 'Behind',
+            field: 'ptsBehind',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'SB Pts',
+            field: 'sbPoints',
+            sort: 'asc',
+            width: 150
+          },
+          {
             label: 'at',
             field: 'r2g1',
             sort: 'asc',
@@ -270,6 +282,7 @@ class App extends Component {
       }
     }
     var r1min = 100000;
+    var r2min = 100000;
     for (i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] != false) {
         var picks = ['', '', '', ''];
@@ -286,6 +299,19 @@ class App extends Component {
         if (total < r1min) {
           r1min = total;
         }
+        var delta = 4;
+        for (var p = 0; p < 2; p++) {
+          if (response[i]['r2g' + (p+1)] !== undefined) {
+            picks[p] = response[i]['r2g' + (p+1)];
+            if (gamestarted[p+delta]) {
+              total += 2 * (Math.abs(picks[p] - this.state.r2margins[p]));
+              // picks[p] += " (" + (Math.abs(picks[p] - this.state.r2margins[p])) + ")";
+            }
+          }
+        }
+        if (total < r2min) {
+          r2min = total;
+        }
       }
     }
     for (i = 0; i < response.length; i++) {
@@ -301,7 +327,7 @@ class App extends Component {
             }
           }
         }
-        var ptsBehind = Math.abs(total-r1min)
+        var ptsBehind = Math.abs(total-r1min);
         tempgrid1.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
           r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
         var week1total = total;
@@ -315,7 +341,9 @@ class App extends Component {
             }
           }
         }
-        tempgrid2.rows[j] = {name: response[i]['fullname'], total: total, r2g1: picks[0], r2g2: picks[1], week1total: week1total};
+        ptsBehind = Math.abs(total-r2min);
+        tempgrid2.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
+          r2g1: picks[0], r2g2: picks[1], week1total: week1total};
         var week2total = total;
         var delta = 6;
         for (var p = 0; p < 1; p++) {
@@ -336,7 +364,7 @@ class App extends Component {
             tempgrid1.columns[g+3].label = response[i]['r1g' + g] + ' ' + tempgrid1.columns[g+3].label;
           }
           for (var g = 1; g <= 2; g++) {
-            tempgrid2.columns[g+1].label = response[i]['r2g' + g] + ' ' + tempgrid2.columns[g+1].label;
+            tempgrid2.columns[g+3].label = response[i]['r2g' + g] + ' ' + tempgrid2.columns[g+3].label;
           }
           for (var g = 1; g <= 1; g++) {
             tempgrid3.columns[g+1].label = response[i]['r3g' + g] + ' ' + tempgrid3.columns[g+1].label;
@@ -351,10 +379,10 @@ class App extends Component {
           }
           var delta = 4;
           for (var g = 1; g <= 2; g++) {
-            tempgrid2.columns[g+1].label = tempgrid2.columns[g+1].label + ' ' + response[i]['r2g' + g];
+            tempgrid2.columns[g+3].label = tempgrid2.columns[g+3].label + ' ' + response[i]['r2g' + g];
             if (gamestarted[g-1+delta]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
-              tempgrid2.columns[g+1].label += " (" + this.state.r2margins[g-1] + ")";
+              tempgrid2.columns[g+3].label += " (" + this.state.r2margins[g-1] + ")";
             }
           }
           var delta = 6;
@@ -582,7 +610,8 @@ class App extends Component {
                 <div>
                   <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
                   <h3/>
-                  <h3>Scroll down to see points behind and SB points behind in week 1 results.</h3>
+                  <h3>Points behind and SB points behind now shown in results for both rounds.</h3>
+                  <h3>Scroll down to see week 1 results.</h3>
                 </div>
               )
             )
