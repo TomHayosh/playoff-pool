@@ -582,9 +582,7 @@ class App extends Component {
                 <div>
                   <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
                   <h3/>
-                  <h3>Great day 1 picks by Rita! Big on the 49ers and called the Titans upset.</h3>
-                  <h3>Bill is pretty good shape too. Everyone is still within a TD in the SB.</h3>
-                  <h3>I'll work on adding the SB points behind columns today.</h3>
+                  <h3>Scroll down to see points behind and SB points behind in week 1 results.</h3>
                 </div>
               )
             )
