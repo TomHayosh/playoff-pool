@@ -1,5 +1,5 @@
 import React from "react";
-import { MDBDataTable, MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact';
+import { MDBCol, MDBInput } from 'mdbreact';
 
 export default props => (
   <MDBCol sm="6" size="12">

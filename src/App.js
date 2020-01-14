@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import GamePicker from "./GamePicker";
-import logo from './logo.svg';
-import { MDBDataTable, MDBContainer, MDBRow, MDBCol, MDBInput } from 'mdbreact';
+// import logo from './logo.svg';
+import { MDBDataTable, MDBContainer, MDBRow } from 'mdbreact';
 import Amplify, { API } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
@@ -213,7 +213,6 @@ class App extends Component {
     var tempgrid1 = {...this.state.r1table};
     var tempgrid2 = {...this.state.r2table};
     var tempgrid3 = {...this.state.r3table};
-    var j = 0;
     var gamestarted = [true, true, true, true, true, true, true];
     for (var i = 0; i < response.length; i++) {
       const isCurrentUserHack = response[i]['edit-r1g1'] ||
@@ -238,7 +237,7 @@ class App extends Component {
         this.setState({r2started: [gamestarted[4], gamestarted[5]]});
         this.setState({r3started: [gamestarted[6]]});
     }
-    for (var i = 0; i < response.length; i++) {
+    for (i = 0; i < response.length; i++) {
       if (response[i]['fullname'] === "margin") {
         this.setState({
           r1margins: [
@@ -284,7 +283,7 @@ class App extends Component {
     var r1min = 100000;
     var r2min = 100000;
     for (i = 0; i < response.length; i++) {
-      if (response[i]['realPerson'] != false) {
+      if (response[i]['realPerson'] !== false) {
         var picks = ['', '', '', ''];
         var total = 0;
         for (var p = 0; p < 4; p++) {
@@ -300,7 +299,7 @@ class App extends Component {
           r1min = total;
         }
         var delta = 4;
-        for (var p = 0; p < 2; p++) {
+        for (p = 0; p < 2; p++) {
           if (response[i]['r2g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r2g' + (p+1)];
             if (gamestarted[p+delta]) {
@@ -314,11 +313,12 @@ class App extends Component {
         }
       }
     }
+    var j = 0;
     for (i = 0; i < response.length; i++) {
-      if (response[i]['realPerson'] != false) {
-        var picks = ['', '', '', ''];
-        var total = 0;
-        for (var p = 0; p < 4; p++) {
+      if (response[i]['realPerson'] !== false) {
+        picks = ['', '', '', ''];
+        total = 0;
+        for (p = 0; p < 4; p++) {
           if (response[i]['r1g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r1g' + (p+1)];
             if (gamestarted[p]) {
@@ -331,8 +331,8 @@ class App extends Component {
         tempgrid1.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
           r1g1: picks[0], r1g2: picks[1], r1g3: picks[2], r1g4: picks[3]};
         var week1total = total;
-        var delta = 4;
-        for (var p = 0; p < 2; p++) {
+        delta = 4;
+        for (p = 0; p < 2; p++) {
           if (response[i]['r2g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r2g' + (p+1)];
             if (gamestarted[p+delta]) {
@@ -345,8 +345,8 @@ class App extends Component {
         tempgrid2.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
           r2g1: picks[0], r2g2: picks[1], week1total: week1total};
         var week2total = total;
-        var delta = 6;
-        for (var p = 0; p < 1; p++) {
+        delta = 6;
+        for (p = 0; p < 1; p++) {
           if (response[i]['r3g' + (p+1)] !== undefined) {
             picks[p] = response[i]['r3g' + (p+1)];
             if (gamestarted[p+delta]) {
@@ -363,30 +363,30 @@ class App extends Component {
           for (var g = 1; g <= 4; g++) {
             tempgrid1.columns[g+3].label = response[i]['r1g' + g] + ' ' + tempgrid1.columns[g+3].label;
           }
-          for (var g = 1; g <= 2; g++) {
+          for (g = 1; g <= 2; g++) {
             tempgrid2.columns[g+3].label = response[i]['r2g' + g] + ' ' + tempgrid2.columns[g+3].label;
           }
-          for (var g = 1; g <= 1; g++) {
+          for (g = 1; g <= 1; g++) {
             tempgrid3.columns[g+1].label = response[i]['r3g' + g] + ' ' + tempgrid3.columns[g+1].label;
           }
         } else if (response[i]['id'] === 'homeTeam') {
-          for (var g = 1; g <= 4; g++) {
+          for (g = 1; g <= 4; g++) {
             tempgrid1.columns[g+3].label = tempgrid1.columns[g+3].label + ' ' + response[i]['r1g' + g];
             if (gamestarted[g-1]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
               tempgrid1.columns[g+3].label += " (" + this.state.r1margins[g-1] + ")";
             }
           }
-          var delta = 4;
-          for (var g = 1; g <= 2; g++) {
+          delta = 4;
+          for (g = 1; g <= 2; g++) {
             tempgrid2.columns[g+3].label = tempgrid2.columns[g+3].label + ' ' + response[i]['r2g' + g];
             if (gamestarted[g-1+delta]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
               tempgrid2.columns[g+3].label += " (" + this.state.r2margins[g-1] + ")";
             }
           }
-          var delta = 6;
-          for (var g = 1; g <= 1; g++) {
+          delta = 6;
+          for (g = 1; g <= 1; g++) {
             tempgrid3.columns[g+1].label = tempgrid3.columns[g+1].label + ' ' + response[i]['r3g' + g];
             if (gamestarted[g-1+delta]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
@@ -609,7 +609,6 @@ class App extends Component {
               ) : (
                 <div>
                   <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
-                  <h3/>
                   <h3>Points behind and SB points behind now shown in results for both rounds.</h3>
                   <h3>Scroll down to see week 1 results.</h3>
                 </div>
