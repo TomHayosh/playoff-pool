@@ -502,10 +502,10 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r2started[0] ?
-                          <GamePicker label={this.state.r2table['columns'][2]['label']} id='r2g1' val={this.state['r2g1']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r2table['columns'][4]['label']} id='r2g1' val={this.state['r2g1']} onChange={this.handleChange}/>
                       : <span/> }
                       {!this.state.r2started[1] ?
-                          <GamePicker label={this.state.r2table['columns'][3]['label']} id='r2g2' val={this.state['r2g2']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r2table['columns'][5]['label']} id='r2g2' val={this.state['r2g2']} onChange={this.handleChange}/>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
@@ -523,16 +523,16 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r1started[0] ?
-                          <GamePicker label={this.state.r1table['columns'][2]['label']} id='r1g1' val={this.state['r1g1']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r1table['columns'][4]['label']} id='r1g1' val={this.state['r1g1']} onChange={this.handleChange}/>
                       : <span/> }
                       {!this.state.r1started[1] ?
-                          <GamePicker label={this.state.r1table['columns'][3]['label']} id='r1g2' val={this.state['r1g2']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r1table['columns'][5]['label']} id='r1g2' val={this.state['r1g2']} onChange={this.handleChange}/>
                       : <span/> }
                       {!this.state.r1started[2] ?
-                          <GamePicker label={this.state.r1table['columns'][4]['label']} id='r1g3' val={this.state['r1g3']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r1table['columns'][6]['label']} id='r1g3' val={this.state['r1g3']} onChange={this.handleChange}/>
                       : <span/> }
                       {!this.state.r1started[3] ?
-                          <GamePicker label={this.state.r1table['columns'][5]['label']} id='r1g4' val={this.state['r1g4']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r1table['columns'][7]['label']} id='r1g4' val={this.state['r1g4']} onChange={this.handleChange}/>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
@@ -609,8 +609,7 @@ class App extends Component {
               ) : (
                 <div>
                   <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
-                  <h3>Points behind and SB points behind now shown in results for both rounds.</h3>
-                  <h3>Scroll down to see week 1 results.</h3>
+                  <h3>Fixed the labels for week 2 picks.</h3>
                 </div>
               )
             )
