@@ -109,6 +109,9 @@ const processStartTimes = function(data, userid) {
           if (!hasStarted && data.Items[i]['id'] === userid) {
             item['edit-'+keys[j]] = true;
           }
+          if (!hasStarted && data.Items[i]['id'] !== userid && item[keys[j]] != 0) {
+            item[keys[j]] = "*";
+          }
         }
       }
       newitems[i] = {...item};
