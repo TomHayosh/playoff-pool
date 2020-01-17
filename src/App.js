@@ -609,7 +609,8 @@ class App extends Component {
               ) : (
                 <div>
                   <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
-                  <h3>Fixed the labels for week 2 picks.</h3>
+                  <br/>
+                  <h3>Non-zero picks from other users now show *</h3>
                 </div>
               )
             )

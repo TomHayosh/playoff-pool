@@ -109,7 +109,7 @@ const processStartTimes = function(data, userid) {
           if (!hasStarted && data.Items[i]['id'] === userid) {
             item['edit-'+keys[j]] = true;
           }
-          if (!hasStarted && data.Items[i]['id'] !== userid && item[keys[j]] != 0) {
+          if (!hasStarted && data.Items[i]['id'] !== userid && data.Items[i][keys[j]] != 0) {
             item[keys[j]] = "*";
           }
         }
