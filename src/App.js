@@ -148,6 +148,18 @@ class App extends Component {
             width: 150
           },
           {
+            label: 'Behind',
+            field: 'ptsBehind',
+            sort: 'asc',
+            width: 150
+          },
+          {
+            label: 'SB Pts',
+            field: 'sbPoints',
+            sort: 'asc',
+            width: 150
+          },
+          {
             label: 'at',
             field: 'r3g1',
             sort: 'asc',
@@ -270,7 +282,8 @@ class App extends Component {
         this.setState({
           r2ended: [
             response[i]['r2g1'],
-            response[i]['r2g2']
+            // response[i]['r2g2']
+            true
           ]
         });
         this.setState({
@@ -282,6 +295,7 @@ class App extends Component {
     }
     var r1min = 100000;
     var r2min = 100000;
+    var r3min = 100000;
     for (i = 0; i < response.length; i++) {
       if (response[i]['realPerson'] !== false) {
         var picks = ['', '', '', ''];
@@ -310,6 +324,19 @@ class App extends Component {
         }
         if (total < r2min) {
           r2min = total;
+        }
+        delta = 6;
+        for (p = 0; p < 1; p++) {
+          if (response[i]['r3g' + (p+1)] !== undefined) {
+            picks[p] = response[i]['r3g' + (p+1)];
+            if (gamestarted[p+delta]) {
+              total += 4 * (Math.abs(picks[p] - this.state.r3margins[p]));
+              // picks[p] += " (" + (Math.abs(picks[p] - this.state.r3margins[p])) + ")";
+            }
+          }
+        }
+        if (total < r3min) {
+          r3min = total;
         }
       }
     }
@@ -355,7 +382,8 @@ class App extends Component {
             }
           }
         }
-        tempgrid3.rows[j] = {name: response[i]['fullname'], total: total, r3g1: picks[0], week2total: week2total, week1total: week1total};
+        tempgrid3.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
+          r3g1: picks[0], week2total: week2total, week1total: week1total};
         j++;
       } else if (onmount) {
         if (response[i]['id'] === 'awayTeam') {
@@ -367,7 +395,7 @@ class App extends Component {
             tempgrid2.columns[g+3].label = response[i]['r2g' + g] + ' ' + tempgrid2.columns[g+3].label;
           }
           for (g = 1; g <= 1; g++) {
-            tempgrid3.columns[g+1].label = response[i]['r3g' + g] + ' ' + tempgrid3.columns[g+1].label;
+            tempgrid3.columns[g+3].label = response[i]['r3g' + g] + ' ' + tempgrid3.columns[g+3].label;
           }
         } else if (response[i]['id'] === 'homeTeam') {
           for (g = 1; g <= 4; g++) {
@@ -387,10 +415,10 @@ class App extends Component {
           }
           delta = 6;
           for (g = 1; g <= 1; g++) {
-            tempgrid3.columns[g+1].label = tempgrid3.columns[g+1].label + ' ' + response[i]['r3g' + g];
+            tempgrid3.columns[g+3].label = tempgrid3.columns[g+3].label + ' ' + response[i]['r3g' + g];
             if (gamestarted[g-1+delta]) {
               // TODO: Make this independent of response row ordering. Away team side doesn't work.
-              tempgrid3.columns[g+1].label += " (" + this.state.r3margins[g-1] + ")";
+              tempgrid3.columns[g+3].label += " (" + this.state.r3margins[g-1] + ")";
             }
           }
         }
@@ -482,7 +510,7 @@ class App extends Component {
                 <MDBContainer>
                     <MDBRow>
                       {!this.state.r3started[0] ?
-                          <GamePicker label={this.state.r3table['columns'][2]['label']} id='r3g1' val={this.state['r3g1']} onChange={this.handleChange}/>
+                          <GamePicker label={this.state.r3table['columns'][4]['label']} id='r3g1' val={this.state['r3g1']} onChange={this.handleChange}/>
                       : <span/> }
                     </MDBRow>
                 </MDBContainer>
@@ -630,6 +658,7 @@ class App extends Component {
     );
   }}
 
+// Monkey: 7, 10, 10, 4, 7.5, 7
 
 const MyTheme = {
   googleSignInButton: { backgroundColor: "red", borderColor: "red" },
