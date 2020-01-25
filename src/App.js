@@ -282,8 +282,7 @@ class App extends Component {
         this.setState({
           r2ended: [
             response[i]['r2g1'],
-            // response[i]['r2g2']
-            true
+            response[i]['r2g2']
           ]
         });
         this.setState({
