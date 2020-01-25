@@ -381,6 +381,7 @@ class App extends Component {
             }
           }
         }
+        ptsBehind = Math.abs(total-r3min);
         tempgrid3.rows[j] = {name: response[i]['fullname'], total: total, ptsBehind: ptsBehind, sbPoints: Math.floor(ptsBehind/4+.75),
           r3g1: picks[0], week2total: week2total, week1total: week1total};
         j++;
