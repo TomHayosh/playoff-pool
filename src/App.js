@@ -639,6 +639,7 @@ class App extends Component {
                   <h3>If you can read this, you're probably dealing with a lambda function cold start.</h3>
                   <br/>
                   <h1>Past winners:</h1>
+                  <h4>2020: Xinfeng Ma, Bill Dyer, Jayson Leseth</h4>
                   <h4>2019: Mike Holton</h4>
                   <h4>2018: Robert Holton</h4>
                   <h4>2017: Chuck Medhurst</h4>
