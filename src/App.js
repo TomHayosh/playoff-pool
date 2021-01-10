@@ -636,8 +636,6 @@ class App extends Component {
                 </div>
               ) : (
                 <div>
-                  <h3>If you can read this, you may be dealing with a lambda function cold start.</h3>
-                  <br/>
                   <h1>Past winners:</h1>
                   <h4>2020: Xinfeng Ma, Bill Dyer, Jayson Leseth</h4>
                   <h4>2019: Mike Holton</h4>
@@ -648,8 +646,7 @@ class App extends Component {
                   <h4>2014: Kevn Bieschke</h4>
                   <h4>2013: Chris Medhurst</h4>
                   <h4>2012: Tom Hayosh</h4>
-                  <br/>
-                  <h4>I also rememeber Earl Holton won in 2010 from last place with a perfect pick of Saints by 14 over Colts.</h4>
+                  <h4>2010: Earl Holton</h4>
                 </div>
               )
             )
