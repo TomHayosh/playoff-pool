@@ -503,15 +503,17 @@ class App extends Component {
           <div>
           {this.state.r1ended[3] && this.state.r2ended[1] ? (
             <form onSubmit={this.update3}>
-                <legend>2020 NFL Super Bowl</legend>
+              <legend>2020 NFL Super Bowl</legend>
               {!this.state.r3started[0] ?
-                  <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/>
-                <MDBContainer>
+                <div>
+                  <small>Use negative numbers to pick the away team, positive for the home team</small><br/>
+                  <MDBContainer>
                     <MDBRow>
-                          <GamePicker label={this.state.r3table['columns'][4]['label']} id='r3g1' val={this.state['r3g1']} onChange={this.handleChange}/>
+                      <GamePicker label={this.state.r3table['columns'][4]['label']} id='r3g1' val={this.state['r3g1']} onChange={this.handleChange}/>
                     </MDBRow>
-                </MDBContainer>
-                <button type="submit" className="btn btn-primary"> Submit Super Bowl Pick </button></div>
+                  </MDBContainer>
+                  <button type="submit" className="btn btn-primary"> Submit Super Bowl Pick </button>
+                </div>
               : <span/> }
             </form>
             ) : <span/>
