@@ -301,7 +301,7 @@ class App extends Component {
     var r2min = 100000;
     var r3min = 100000;
     for (i = 0; i < response.length; i++) {
-      if (response[i]['realPerson'] !== false) {
+      if (response[i]['realPerson'] !== false && response[i]['joined'] === true) {
         var picks = ['', '', '', ''];
         var total = 0;
         for (var p = 0; p < 4; p++) {
@@ -346,7 +346,7 @@ class App extends Component {
     }
     var j = 0;
     for (i = 0; i < response.length; i++) {
-      if (response[i]['realPerson'] !== false) {
+      if (response[i]['realPerson'] !== false && response[i]['joined'] === true) {
         picks = ['', '', '', ''];
         total = 0;
         for (p = 0; p < 4; p++) {
@@ -450,6 +450,7 @@ class App extends Component {
         r1g2: 0,
         r1g3: 0,
         r1g4: 0,
+        joined: true
       }
     });
     this.fetchData();
