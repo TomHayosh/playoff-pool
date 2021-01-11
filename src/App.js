@@ -509,7 +509,7 @@ class App extends Component {
           <div>
           {this.state.r2ended[1] ? (
             <form onSubmit={this.update3}>
-              <legend>2020 NFL Super Bowl</legend>
+              <legend>2021 NFL Super Bowl</legend>
               {this.state.r3started[0] ?
                 <MDBDataTable
                   striped
@@ -535,7 +535,7 @@ class App extends Component {
           }
            {this.state.r1ended[3] ? (
             <div>
-            <legend>2020 NFL Conference Championships</legend>
+            <legend>2021 NFL Conference Championships</legend>
             <form onSubmit={this.update2}>
               {!this.state.r2started[1] ?
                   <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
@@ -557,7 +557,7 @@ class App extends Component {
             </div>
             ) : (
             <form onSubmit={this.update}>
-                <legend>2020 NFL Divisional Round</legend>
+                <legend>2021 NFL Divisional Round</legend>
               {!this.state.r1started[3] ?
                   <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
               : <span/> }
@@ -595,7 +595,7 @@ class App extends Component {
                 searching={false}
                 data={this.state.r2table}
               />
-              <legend>2020 NFL Divisional Round</legend>
+              <legend>2021 NFL Divisional Round</legend>
             </div>
           : <span/> }
           <MDBDataTable
@@ -609,7 +609,7 @@ class App extends Component {
           </div>
         ) : (this.state.newEntrant && !this.state.r1started[0]? (
           <div>
-            <h1>Welcome to the 2020 NFL Playoff Pool!</h1>
+            <h1>Welcome to the 2021 NFL Playoff Pool!</h1>
             <button onClick={this.handleSubmit}>TL;DR. Join the pool for $20!</button><p/>
             <p>The pool runs for 3 rounds, Divisional playoffs through Super Bowl.
             For each game in the round, you'll pick a winner and a margin of victory.<br/>
