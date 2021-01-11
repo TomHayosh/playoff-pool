@@ -15,6 +15,7 @@ class App extends Component {
     super(props);
     this.state = {
       newEntrant: false,
+      joined: false,
       idFound: false,
       errorResponse: true,
       r1g1: 0,
@@ -207,7 +208,7 @@ class App extends Component {
 
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
-    if (response1['id'] !== undefined) {
+    if (response1['id'] !== undefined && response['joined'] === true) {
       this.setState({
         idFound: true,
         r1g1: response1['r1g1'],
@@ -218,6 +219,8 @@ class App extends Component {
         r2g2: response1['r2g2'],
         r3g1: response1['r3g1']
       });
+    } else if (response1['id'] !== undefined) {
+      this.setState({newEntrant: true});
     } else if (response1['newEntrant']) {
       this.setState({newEntrant: true});
     }

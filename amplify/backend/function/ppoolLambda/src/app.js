@@ -344,7 +344,7 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function(req, res) {
       res.statusCode = 500;
       res.json({error: 'Could not load items: ' + err.message});
     } else {
-      if (data.Item && data.Item.joined == true) {
+      if (data.Item) {
         console.log("Found item - test");
         res.json(data.Item);
       } else {
