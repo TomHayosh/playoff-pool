@@ -187,14 +187,16 @@ class App extends Component {
   async componentDidMount() {
     await this.fetchData(true);
     var el = document.getElementById("r1TotalHeader");
-    el.click();
-    el = document.getElementById("r2TotalHeader");
     if (el !== null) {
       el.click();
-    }
-    el = document.getElementById("r3TotalHeader");
-    if (el !== null) {
-      el.click();
+      el = document.getElementById("r2TotalHeader");
+      if (el !== null) {
+        el.click();
+      }
+      el = document.getElementById("r3TotalHeader");
+      if (el !== null) {
+        el.click();
+      }
     }
     /*
     await API.post("ppoolApi", "/items", {
@@ -208,7 +210,7 @@ class App extends Component {
 
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
-    if (response1['id'] !== undefined && response['joined'] === true) {
+    if (response1['id'] !== undefined && response1['joined'] === true) {
       this.setState({
         idFound: true,
         r1g1: response1['r1g1'],
