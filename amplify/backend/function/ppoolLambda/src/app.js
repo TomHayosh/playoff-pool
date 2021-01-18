@@ -88,9 +88,9 @@ const processStartTimes = function(data, userid) {
   const now = Date.now();
 
   var i;
-  console.log(`userid = ${userid}`);
+  // console.log(`userid = ${userid}`);
   for (i = 0; i < data.Items.length; i++) {
-    console.log(`dataid = ${data.Items[i]['id']}`);
+    // console.log(`dataid = ${data.Items[i]['id']}`);
     if (data.Items[i]['realPerson'] === false) {
       newitems[i] = {...data.Items[i]};
     } else {
