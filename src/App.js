@@ -511,14 +511,7 @@ class App extends Component {
             <form onSubmit={this.update3}>
               <legend>2021 NFL Super Bowl</legend>
               {this.state.r3started[0] ?
-                <MDBDataTable
-                  striped
-                  bordered
-                  hover
-                  paging={false}
-                  searching={false}
-                  data={this.state.r3table}
-                />
+                <div/>
               : 
                 <div>
                   <small>Use negative numbers to pick the away team, positive for the home team</small><br/>
@@ -530,6 +523,14 @@ class App extends Component {
                   <button type="submit" className="btn btn-primary"> Submit Super Bowl Pick </button>
                 </div>
               }
+              <MDBDataTable
+                striped
+                bordered
+                hover
+                paging={false}
+                searching={false}
+                data={this.state.r3table}
+              />
             </form>
             ) : <span/>
           }
