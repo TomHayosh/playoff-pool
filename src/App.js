@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import GamePicker from "./GamePicker";
 // import logo from './logo.svg';
 import { MDBDataTable, MDBContainer, MDBRow } from 'mdbreact';
+import { MDBCol, MDBInput } from 'mdbreact';
 import Amplify, { API } from "aws-amplify";
 import aws_exports from "./aws-exports";
 import { withAuthenticator } from "aws-amplify-react";
@@ -18,6 +19,7 @@ class App extends Component {
       joined: false,
       idFound: false,
       errorResponse: true,
+      simFinal: 0,
       r1g1: 0,
       r1g2: 0,
       r1g3: 0,
@@ -211,6 +213,8 @@ class App extends Component {
   async fetchData(onmount=false) {
     const response1 = await API.get("ppoolApi", "/items/object/fakeId");
     if (response1['id'] !== undefined && response1['joined'] === true) {
+      // UNDO THIS
+      // response1['r3g1'] = response1['r1g3'];
       this.setState({
         idFound: true,
         r1g1: response1['r1g1'],
@@ -232,6 +236,8 @@ class App extends Component {
     var tempgrid3 = {...this.state.r3table};
     var gamestarted = [true, true, true, true, true, true, true];
     for (var i = 0; i < response.length; i++) {
+      // UNDO THIS
+      // response[i]['r3g1'] = response[i]['r1g3'];
       const isCurrentUserHack = response[i]['edit-r1g1'] ||
         response[i]['edit-r1g2'] ||
         response[i]['edit-r1g3'] ||
@@ -239,7 +245,9 @@ class App extends Component {
         response[i]['edit-r2g1'] ||
         response[i]['edit-r2g2'] ||
         response[i]['edit-r3g1'];
+        // UNDO THIS
         if (isCurrentUserHack) {
+        // if (false) {
           gamestarted = [
               !response[i]['edit-r1g1'],
               !response[i]['edit-r1g2'],
@@ -252,7 +260,9 @@ class App extends Component {
         }
         this.setState({r1started: [gamestarted[0], gamestarted[1], gamestarted[2], gamestarted[3]]});
         this.setState({r2started: [gamestarted[4], gamestarted[5]]});
+        // UNDO THIS
         this.setState({r3started: [gamestarted[6]]});
+        // this.setState({r3started: [true]});
     }
     for (i = 0; i < response.length; i++) {
       if (response[i]['fullname'] === "margin") {
@@ -272,6 +282,11 @@ class App extends Component {
         });
         this.setState({
           r3margins: [
+            response[i]['r3g1']
+          ]
+        });
+        this.setState({
+          simFinal: [
             response[i]['r3g1']
           ]
         });
@@ -434,6 +449,39 @@ class App extends Component {
     this.setState({r3table: tempgrid3});
   }
 
+  handleSimChange = event => {
+    const id = event.target.id;
+    this.setState({ [id]: event.target.value });
+    var tempgrid3 = {...this.state.r3table};
+    var r3min = 100000;
+    let gameStrings = tempgrid3.columns[4].label.split("(");
+    let ifString = "";
+    if (event.target.value != this.state.r3margins[0]) {
+      ifString = "If ";
+    }
+    tempgrid3.columns[4].label = gameStrings[0] + "(" + ifString + event.target.value + ")";
+    for (let i in tempgrid3.rows) {
+      let pickStrings = tempgrid3.rows[i].r3g1.split("(");
+      let pick = parseInt(pickStrings[0]);
+      let oldDelta = parseInt(pickStrings[1]);
+      let newDelta = Math.abs(event.target.value - pick);
+      tempgrid3.rows[i].r3g1 = `${pickStrings[0]}(${newDelta})`;
+      tempgrid3.rows[i].total = tempgrid3.rows[i].total + 4 * (newDelta - oldDelta);
+      if (tempgrid3.rows[i].total < r3min) {
+        r3min = tempgrid3.rows[i].total;
+      }
+    }
+    for (let i in tempgrid3.rows) {
+      tempgrid3.rows[i].ptsBehind = Math.abs(tempgrid3.rows[i].total-r3min);
+      tempgrid3.rows[i].sbPoints = Math.floor(tempgrid3.rows[i].ptsBehind/4+.75);
+    }
+    tempgrid3.columns[1].sort = 'asc';
+    let el = document.getElementById("r3TotalHeader");
+    if (el !== null) {
+      el.click();
+    }
+  };
+
   handleChange = event => {
     const id = event.target.id;
     this.setState({ [id]: event.target.value });
@@ -511,8 +559,12 @@ class App extends Component {
             <form onSubmit={this.update3}>
               <legend>2021 NFL Super Bowl</legend>
               {this.state.r3started[0] ?
-                <div/>
-              : 
+                <MDBCol sm="6" size="12">
+                  <MDBInput
+                    label="If the final margin is:"
+                    id="simFinal" value={this.state['simFinal']} type="number" onChange={this.handleSimChange}/>
+                </MDBCol>
+                :
                 <div>
                   <small>Use negative numbers to pick the away team, positive for the home team</small><br/>
                   <MDBContainer>
