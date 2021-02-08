@@ -690,6 +690,7 @@ class App extends Component {
               ) : (
                 <div>
                   <h1>Past winners:</h1>
+                  <h4>2021: Jim Silverstein</h4>
                   <h4>2020: Xinfeng Ma, Bill Dyer, Jayson Leseth</h4>
                   <h4>2019: Mike Holton</h4>
                   <h4>2018: Robert Holton</h4>
