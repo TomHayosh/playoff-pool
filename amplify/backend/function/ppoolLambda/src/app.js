@@ -66,6 +66,18 @@ const startTimesIndex = function(items) {
   return index;
 }
 
+const gameEndedIndex = function(items) {
+  var index = -1;
+  for (var i = 0; i < items.length; i++) {
+    if (items[i]['id'] === 'gameEnded') {
+      index = i;
+      // console.log("startTimes = " + index);
+      break;
+    }
+  }
+  return index;
+}
+
 const currentUserIndex = function(items, userid) {
   var index = -1;
   for (var i = 0; i < items.length; i++) {
@@ -92,7 +104,8 @@ Object.freeze(GameStatus);
 
 const processStartTimes = function(data, userid) {
   var newitems = [];
-  var startTimes = startTimesIndex(data.Items);
+  var startTimesI = startTimesIndex(data.Items);
+  var gameEndedI = gameEndedIndex(data.Items);
   const now = Date.now();
 
   var i;
@@ -115,8 +128,8 @@ const processStartTimes = function(data, userid) {
         } else {
           var round = Number.parseInt(keys[j][1]);
           var game = Number.parseInt(keys[j][3]);
-          const hasStarted = gameStarted(data.Items[startTimes], round, game, now);
-          if (data.Items[gameEnded] === true) {
+          const hasStarted = gameStarted(data.Items[startTimesI], round, game, now);
+          if (data.Items[gameEndedI] === true) {
             gameStatus[round-1][game-1] = GameStatus.ENDED;
           } else if (hasStarted) {
             gameStatus[round-1][game-1] = GameStatus.STARTED;
@@ -136,7 +149,7 @@ const processStartTimes = function(data, userid) {
           }
         }
       }
-      item[gameEnded][gameStatus] = gameStatus;
+      item[gameEndedI].gameStatus = gameStatus;
       newitems[i] = {...item};
     }
     /*
