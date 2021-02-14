@@ -136,6 +136,7 @@ const processStartTimes = function(data, userid) {
           }
         }
       }
+      gameStatus[realPerson] = false;
       item[gameStatus] = gameStatus;
       newitems[i] = {...item};
     }
