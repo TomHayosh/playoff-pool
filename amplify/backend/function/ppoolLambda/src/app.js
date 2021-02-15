@@ -110,6 +110,7 @@ const processStartTimes = function(data, userid) {
 
   var i;
   // console.log(`userid = ${userid}`);
+  console.log('In processStartTimes');
   for (i = 0; i < data.Items.length; i++) {
     // console.log(`dataid = ${data.Items[i]['id']}`);
     let gameStatus = [
@@ -117,6 +118,7 @@ const processStartTimes = function(data, userid) {
       [GameStatus.UNKNOWN, GameStatus.UNKNOWN],
       [GameStatus.UNKNOWN]
     ];
+    console.log('init gameStatus');
     if (data.Items[i]['realPerson'] === false) {
       newitems[i] = {...data.Items[i]};
     } else {
@@ -129,6 +131,7 @@ const processStartTimes = function(data, userid) {
           var round = Number.parseInt(keys[j][1]);
           var game = Number.parseInt(keys[j][3]);
           const hasStarted = gameStarted(data.Items[startTimesI], round, game, now);
+          console.log('hasStarted okay');
           if (data.Items[gameEndedI] === true) {
             gameStatus[round-1][game-1] = GameStatus.ENDED;
           } else if (hasStarted) {
@@ -136,6 +139,7 @@ const processStartTimes = function(data, userid) {
           } else {
             gameStatus[round-1][game-1] = GameStatus.NOT_STARTED;
           }
+          console.log('updated gameStatus');
           item[keys[j]] = "";
           if (hasStarted || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
@@ -149,7 +153,9 @@ const processStartTimes = function(data, userid) {
           }
         }
       }
-      item[gameEndedI].gameStatus = gameStatus;
+      console.log('penultimate');
+      item[gameEndedI].gameStatus = 50;
+      console.log('ready to sent');
       newitems[i] = {...item};
     }
     /*
