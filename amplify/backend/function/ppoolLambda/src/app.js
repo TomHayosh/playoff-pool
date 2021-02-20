@@ -108,17 +108,36 @@ const processStartTimes = function(data, userid) {
   var gameEndedI = gameEndedIndex(data.Items);
   const now = Date.now();
 
+  let gameStatus = [
+    [GameStatus.UNKNOWN, GameStatus.UNKNOWN, GameStatus.UNKNOWN, GameStatus.UNKNOWN],
+    [GameStatus.UNKNOWN, GameStatus.UNKNOWN],
+    [GameStatus.UNKNOWN]
+  ];
+  const keys = Object.keys(data.Items[gameEndedI]);
+  for (var j = 0; j < keys.length; j++) {
+    if (keys[j].match(/r1g/) !== null || keys[j].match(/r2g/) !== null || keys[j].match(/r3g/) !== null) {
+      var round = Number.parseInt(keys[j][1]);
+      var game = Number.parseInt(keys[j][3]);
+      const hasStarted = gameStarted(data.Items[startTimesI], round, game, now);
+      if (data.Items[gameEndedI].keys[j] === true) {
+        gameStatus[round-1][game-1] = GameStatus.ENDED;
+      } else if (hasStarted) {
+        gameStatus[round-1][game-1] = GameStatus.STARTED;
+      } else {
+        gameStatus[round-1][game-1] = GameStatus.NOT_STARTED;
+      }
+    }
+  }
+  newitems[0]['realPerson'] = false;
+  newitems[0]['fullname'] = 'gameStatus';
+  newitems[0]['gameStatus'] = gameStatus;        
+
   var i;
   // console.log(`userid = ${userid}`);
   for (i = 0; i < data.Items.length; i++) {
     // console.log(`dataid = ${data.Items[i]['id']}`);
-    let gameStatus = [
-      [GameStatus.UNKNOWN, GameStatus.UNKNOWN, GameStatus.UNKNOWN, GameStatus.UNKNOWN],
-      [GameStatus.UNKNOWN, GameStatus.UNKNOWN],
-      [GameStatus.UNKNOWN]
-    ];
     if (data.Items[i]['realPerson'] === false) {
-      newitems[i] = {...data.Items[i]};
+      newitems[i+1] = {...data.Items[i]};
     } else {
       var item = {};
       const keys = Object.keys(data.Items[i]);
@@ -129,13 +148,6 @@ const processStartTimes = function(data, userid) {
           var round = Number.parseInt(keys[j][1]);
           var game = Number.parseInt(keys[j][3]);
           const hasStarted = gameStarted(data.Items[startTimesI], round, game, now);
-          if (data.Items[gameEndedI] === true) {
-            gameStatus[round-1][game-1] = GameStatus.ENDED;
-          } else if (hasStarted) {
-            gameStatus[round-1][game-1] = GameStatus.STARTED;
-          } else {
-            gameStatus[round-1][game-1] = GameStatus.NOT_STARTED;
-          }
           item[keys[j]] = "";
           if (hasStarted || data.Items[i]['id'] === userid) {
             item[keys[j]] = data.Items[i][keys[j]];
@@ -149,8 +161,7 @@ const processStartTimes = function(data, userid) {
           }
         }
       }
-      item['gameStatus'] = gameStatus;
-      newitems[i] = {...item};
+      newitems[i+1] = {...item};
     }
     /*
     var item = {};
