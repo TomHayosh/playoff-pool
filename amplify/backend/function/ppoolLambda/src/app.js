@@ -119,7 +119,7 @@ const processStartTimes = function(data, userid) {
       var round = Number.parseInt(keys[j][1]);
       var game = Number.parseInt(keys[j][3]);
       const hasStarted = gameStarted(data.Items[startTimesI], round, game, now);
-      if (keys[j] === true) {
+      if (data.Items[gameEndedI][keys[j]] === true) {
         gameStatus[round-1][game-1] = GameStatus.ENDED;
       } else if (hasStarted) {
         gameStatus[round-1][game-1] = GameStatus.STARTED;
