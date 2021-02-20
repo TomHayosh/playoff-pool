@@ -128,6 +128,7 @@ const processStartTimes = function(data, userid) {
       }
     }
   }
+  newitems[0] = {};
   newitems[0]['realPerson'] = false;
   newitems[0]['fullname'] = 'gameStatus';
   newitems[0]['gameStatus'] = gameStatus;        
