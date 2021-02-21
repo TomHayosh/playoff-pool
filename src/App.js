@@ -244,41 +244,52 @@ class App extends Component {
       this.setState({newEntrant: true});
     }
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
+    // response[0]['gameStatus'] = [ [ 1, 1, 1, 1 ], [ 1, 1 ], [ 1 ]];
     this.setState({gameStatus: response[0]['gameStatus']});
+    const startedValues = [GameStatus.STARTED, GameStatus.ENDED];
+    this.setState({
+      r1started: [
+        startedValues.includes(response[0]['gameStatus'][0][0]),
+        startedValues.includes(response[0]['gameStatus'][0][1]),
+        startedValues.includes(response[0]['gameStatus'][0][2]),
+        startedValues.includes(response[0]['gameStatus'][0][3])
+      ],
+      r2started: [
+        startedValues.includes(response[0]['gameStatus'][1][0]),
+        startedValues.includes(response[0]['gameStatus'][1][1])
+      ],
+      r3started: [
+        startedValues.includes(response[0]['gameStatus'][2][0])
+      ]
+    });
+    this.setState({
+      r1ended: [
+        response[0]['gameStatus'][0][0] === GameStatus.ENDED,
+        response[0]['gameStatus'][0][1] === GameStatus.ENDED,
+        response[0]['gameStatus'][0][2] === GameStatus.ENDED,
+        response[0]['gameStatus'][0][3] === GameStatus.ENDED
+      ],
+      r2ended: [
+        response[0]['gameStatus'][1][0] === GameStatus.ENDED,
+        response[0]['gameStatus'][1][1] === GameStatus.ENDED
+      ],
+      r3ended: [
+        response[0]['gameStatus'][2][0] === GameStatus.ENDED
+      ]
+    })
     var tempgrid1 = {...this.state.r1table};
     var tempgrid2 = {...this.state.r2table};
     var tempgrid3 = {...this.state.r3table};
-    var gamestarted = [true, true, true, true, true, true, true];
+    var gamestarted = [
+      startedValues.includes(response[0]['gameStatus'][0][0]),
+      startedValues.includes(response[0]['gameStatus'][0][1]),
+      startedValues.includes(response[0]['gameStatus'][0][2]),
+      startedValues.includes(response[0]['gameStatus'][0][3]),
+      startedValues.includes(response[0]['gameStatus'][1][0]),
+      startedValues.includes(response[0]['gameStatus'][1][1]),
+      startedValues.includes(response[0]['gameStatus'][2][0]),
+    ]
     for (var i = 0; i < response.length; i++) {
-      // UNDO THIS
-      // response[i]['r3g1'] = response[i]['r1g3'];
-      const isCurrentUserHack = response[i]['edit-r1g1'] ||
-        response[i]['edit-r1g2'] ||
-        response[i]['edit-r1g3'] ||
-        response[i]['edit-r1g4'] ||
-        response[i]['edit-r2g1'] ||
-        response[i]['edit-r2g2'] ||
-        response[i]['edit-r3g1'];
-        // UNDO THIS
-        if (isCurrentUserHack) {
-        // if (false) {
-          gamestarted = [
-              !response[i]['edit-r1g1'],
-              !response[i]['edit-r1g2'],
-              !response[i]['edit-r1g3'],
-              !response[i]['edit-r1g4'],
-              !response[i]['edit-r2g1'],
-              !response[i]['edit-r2g2'],
-              !response[i]['edit-r3g1']
-          ]
-        }
-        this.setState({r1started: [gamestarted[0], gamestarted[1], gamestarted[2], gamestarted[3]]});
-        this.setState({r2started: [gamestarted[4], gamestarted[5]]});
-        // UNDO THIS
-        this.setState({r3started: [gamestarted[6]]});
-        // this.setState({r3started: [true]});
-    }
-    for (i = 0; i < response.length; i++) {
       if (response[i]['fullname'] === "margin") {
         this.setState({
           r1margins: [
@@ -301,26 +312,6 @@ class App extends Component {
         });
         this.setState({
           simFinal: [
-            response[i]['r3g1']
-          ]
-        });
-      } else if (response[i]['fullname'] === "gameEnded") {
-        this.setState({
-          r1ended: [
-            response[i]['r1g1'],
-            response[i]['r1g2'],
-            response[i]['r1g3'],
-            response[i]['r1g4']
-          ]
-        });
-        this.setState({
-          r2ended: [
-            response[i]['r2g1'],
-            response[i]['r2g2']
-          ]
-        });
-        this.setState({
-          r3ended: [
             response[i]['r3g1']
           ]
         });
