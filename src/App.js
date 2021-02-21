@@ -11,6 +11,14 @@ import './App.css';
 
 Amplify.configure(aws_exports);
 
+const GameStatus = {
+  UNKNOWN: 0,
+  NOT_STARTED: 1,
+  STARTED: 2,
+  ENDED: 3
+}
+Object.freeze(GameStatus);
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +28,11 @@ class App extends Component {
       idFound: false,
       errorResponse: true,
       simFinal: 0,
+      gameStatus: [
+        [GameStatus.UNKNOWN, GameStatus.UNKNOWN, GameStatus.UNKNOWN, GameStatus.UNKNOWN],
+        [GameStatus.UNKNOWN, GameStatus.UNKNOWN],
+        [GameStatus.UNKNOWN]
+      ],
       r1g1: 0,
       r1g2: 0,
       r1g3: 0,
@@ -231,6 +244,7 @@ class App extends Component {
       this.setState({newEntrant: true});
     }
     const response = await API.get("ppoolApi", "/items/week1/fakeId");
+    this.setState({gameStatus: response[0]['gameStatus']});
     var tempgrid1 = {...this.state.r1table};
     var tempgrid2 = {...this.state.r2table};
     var tempgrid3 = {...this.state.r3table};
@@ -456,7 +470,7 @@ class App extends Component {
     var r3min = 100000;
     let gameStrings = tempgrid3.columns[4].label.split("(");
     let ifString = "";
-    if (event.target.value != this.state.r3margins[0]) {
+    if (event.target.value !== this.state.r3margins[0]) {
       ifString = "If ";
     }
     tempgrid3.columns[4].label = gameStrings[0] + "(" + ifString + event.target.value + ")";
@@ -660,7 +674,7 @@ class App extends Component {
             data={this.state.r1table}
           />
           </div>
-        ) : (this.state.newEntrant && !this.state.r1started[0]? (
+        ) : (this.state.newEntrant && this.state.gameStatus[0][0] === GameStatus.NOT_STARTED ? (
           <div>
             <h1>Welcome to the 2021 NFL Playoff Pool!</h1>
             <button onClick={this.handleSubmit}>TL;DR. Join the pool for $20!</button><p/>
@@ -682,7 +696,7 @@ class App extends Component {
             <button onClick={this.handleSubmit}>Join the pool!</button>
             </div>
           ) : (
-            (this.state.newEntrant ? (
+            (this.state.newEntrant && [ GameStatus.STARTED, GameStatus.ENDED ].includes(this.state.gameStatus[0][0]) ? (
                 <div>
                   <h1>Sorry</h1>
                   <p>Sorry, the playoff pool has started, and new entries are no longer accepted.</p>
