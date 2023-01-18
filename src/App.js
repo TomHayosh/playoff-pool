@@ -562,7 +562,7 @@ class App extends Component {
           <div>
           {this.state.r2ended[1] ? (
             <form onSubmit={this.update3}>
-              <legend>2021 NFL Super Bowl</legend>
+              <legend>2023 NFL Super Bowl</legend>
               {this.state.r3started[0] ?
                 <MDBCol sm="6" size="12">
                   <MDBInput
@@ -593,7 +593,7 @@ class App extends Component {
           }
            {this.state.r1ended[3] ? (
             <div>
-            <legend>2021 NFL Conference Championships</legend>
+            <legend>2023 NFL Conference Championships</legend>
             <form onSubmit={this.update2}>
               {!this.state.r2started[1] ?
                   <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
@@ -615,7 +615,7 @@ class App extends Component {
             </div>
             ) : (
             <form onSubmit={this.update}>
-                <legend>2021 NFL Divisional Round</legend>
+                <legend>2023 NFL Divisional Round</legend>
               {!this.state.r1started[3] ?
                   <div><small>Use negative numbers to pick the away team, positive for the home team</small><br/></div>
               : <span/> }
@@ -653,7 +653,7 @@ class App extends Component {
                 searching={false}
                 data={this.state.r2table}
               />
-              <legend>2021 NFL Divisional Round</legend>
+              <legend>2023 NFL Divisional Round</legend>
             </div>
           : <span/> }
           <MDBDataTable
@@ -667,7 +667,7 @@ class App extends Component {
           </div>
         ) : (this.state.newEntrant && this.state.gameStatus[0][0] === GameStatus.NOT_STARTED ? (
           <div>
-            <h1>Welcome to the 2021 NFL Playoff Pool!</h1>
+            <h1>Welcome to the 2023 NFL Playoff Pool!</h1>
             <button onClick={this.handleSubmit}>TL;DR. Join the pool for $20!</button><p/>
             <p>The pool runs for 3 rounds, Divisional playoffs through Super Bowl.
             For each game in the round, you'll pick a winner and a margin of victory.<br/>
@@ -695,6 +695,7 @@ class App extends Component {
               ) : (
                 <div>
                   <h1>Past winners:</h1>
+                  <h4>2022: Rita Leseth and Sam</h4>
                   <h4>2021: Jim Silverstein</h4>
                   <h4>2020: Xinfeng Ma, Bill Dyer, Jayson Leseth</h4>
                   <h4>2019: Mike Holton</h4>
